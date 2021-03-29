@@ -3,15 +3,42 @@ import * as THREE from '../node_modules/three/build/three.module.js';
 class GridMesh extends THREE.Mesh {
   constructor(maxSize, value) {
     function randomGeometry(maxSize, value) {
-      console.log(value);
-      //   //   console.log(maxSize);
-      //   return Math.random() > 0.5
-      //     ? randomCubeGeometry(maxSize)
-      //     : randomSphereGeometry(maxSize);
-      if (value === 0) {
-        return randomSphereGeometry(maxSize);
-      } else {
-        return randomCubeGeometry(maxSize);
+      // console.log(value);
+      // //   //   console.log(maxSize);
+      // //   return Math.random() > 0.5
+      // //     ? randomCubeGeometry(maxSize)
+      // //     : randomSphereGeometry(maxSize);
+      // if (value === 0) {
+      //   return randomSphereGeometry(maxSize);
+      // }
+
+      // if (value === 1) {
+      //   return randomCubeGeometry(maxSize);
+      // }
+
+      // if (value === 2) {
+      //   return randomCubeGeometry(maxSize);
+      // }
+      // if (value === 4) {
+      //   return randomSphereGeometry(maxSize);
+      // }
+
+      switch (value) {
+        case 0:
+          return randomCubeGeometry(maxSize);
+          break;
+        case 1:
+          return randomSphereGeometry(maxSize);
+          break;
+        case 2:
+          return randomCubeGeometry(maxSize);
+          break;
+        case 3:
+          return randomSphereGeometry(maxSize);
+          break;
+        default:
+          return randomSphereGeometry(maxSize);
+          break;
       }
     }
 

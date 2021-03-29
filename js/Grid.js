@@ -24,6 +24,7 @@ class Grid {
 
   moveLeft() {
     console.log('Move Grid Left');
+    let value = 2;
 
     this.origin.add(new THREE.Vector3(-this.spacing, 0, 0));
 
@@ -39,7 +40,7 @@ class Grid {
           this.objects[x][z] = this.objects[x - 1][z];
         } else {
           // Create new objects in left side of grid
-          this.addNewMesh(x, z);
+          this.addNewMesh(x, z, value);
         }
       }
     }
@@ -49,6 +50,7 @@ class Grid {
 
   moveRight() {
     console.log('Move Grid Right');
+    let value = 1;
 
     this.origin.add(new THREE.Vector3(this.spacing, 0, 0));
 
@@ -64,7 +66,7 @@ class Grid {
           this.objects[x][z] = this.objects[x + 1][z];
         } else {
           // Create new objects in left side of grid
-          this.addNewMesh(x, z);
+          this.addNewMesh(x, z, value);
         }
       }
     }
@@ -74,6 +76,7 @@ class Grid {
 
   moveBack() {
     console.log('Move Grid Back');
+    let value = 3;
 
     this.origin.add(new THREE.Vector3(0, 0, -this.spacing));
 
@@ -89,7 +92,7 @@ class Grid {
           this.objects[x][z] = this.objects[x][z - 1];
         } else {
           // Create new objects in left side of grid
-          this.addNewMesh(x, z);
+          this.addNewMesh(x, z, value);
         }
       }
     }
