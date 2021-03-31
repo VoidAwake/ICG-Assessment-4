@@ -13,16 +13,16 @@
 			var prevTime = performance.now();
 			var velocity = new THREE.Vector3();
 			var direction = new THREE.Vector3();
-			var color = new THREE.Color();
 
 			
 			function init() {
 
 				var ratio = window.innerWidth/window.innerHeight;
 				camera = new THREE.PerspectiveCamera(45,ratio,0.00001,1000);
-		    	var Pos = new THREE.Vector3(0,0,0);
+
+		    	var Pos = new THREE.Vector3(0,100,0);
 		    	camera.position.set(Pos.x,Pos.y,Pos.z);
-		    	var Dir = new THREE.Vector3(0,0,1);
+		    	var Dir = new THREE.Vector3(0.5, 0, 0);
 		    	camera.lookAt(Dir.x,Dir.y,Dir.z);
 
 				scene = new THREE.Scene();
@@ -135,7 +135,7 @@
 			function animate() {
 			
 				requestAnimationFrame( animate );
-				
+				controls.getObject().position.y = 1;
 				if ( controlsEnabled == true ) {
 
 				 var time = performance.now();
@@ -151,9 +151,9 @@
 					if ( moveForward || moveBackward ) velocity.z -= direction.z * 400.0 * delta;
 					if ( moveLeft || moveRight ) velocity.x -= direction.x * 400.0 * delta;
 			
-					getControls().getObject().translateX( velocity.x * delta );
-					getControls().getObject().translateZ( velocity.z * delta );
-			
+					controls.getObject().translateX( velocity.x * delta );
+					controls.getObject().translateZ( velocity.z * delta );
+					
 					prevTime = time;
 			
 				}
