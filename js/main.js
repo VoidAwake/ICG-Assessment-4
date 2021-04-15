@@ -1,6 +1,7 @@
 import * as THREE from '../node_modules/three/build/three.module.js';
 import { Grid } from "./Grid.js";
 import { CameraController } from "./CameraController.js";
+import { FBXLoader } from './jsm/loaders/FBXLoader.js';
 
 const scene = new THREE.Scene();
 const ratio = window.innerWidth / window.innerHeight;
@@ -11,6 +12,13 @@ const camera = new THREE.PerspectiveCamera(
     0.1,
     1000
 );
+var loader = new THREE.FBXLoader();
+
+loader.load( 'Assets/AurynSky/Forest Pack/Models/ForestBlock02.FBX', function ( object ) {
+
+    scene.add( object );
+
+} );
 
 camera.position.set(13, 25, 30);
 camera.lookAt(13, 0, 15);
