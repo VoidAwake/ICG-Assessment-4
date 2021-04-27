@@ -168,40 +168,12 @@ class Grid {
 
         const maxYPosition = -4;
 
-        for (let i = 0; i < this.size; i++) {
         // Apply opacities to objects
-            // Left side
-            this.objects[0][i].material.color = this.objects[0][i].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacities[0][i]);
-            this.objects[1][i].material.color = this.objects[1][i].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacities[1][i]);
-            
-            // Right side
-            this.objects[this.size - 1][i].material.color = this.objects[this.size - 1][i].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacities[this.size - 1][i]);
-            this.objects[this.size - 2][i].material.color = this.objects[this.size - 2][i].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacities[this.size - 2][i]);
-            
-            // Back side
-            this.objects[i][0].material.color = this.objects[i][0].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacities[i][0]);
-            this.objects[i][1].material.color = this.objects[i][1].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacities[i][1]);
-
-            // Forward side
-            this.objects[i][this.size - 1].material.color = this.objects[i][this.size - 1].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacities[i][this.size - 1]);
-            this.objects[i][this.size - 2].material.color = this.objects[i][this.size - 2].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacities[i][this.size - 2]);
-
-        // Set Y positions
-            // Left side
-            this.objects[0][i].position.y = opacities[0][i] * maxYPosition;
-            this.objects[1][i].position.y = opacities[1][i] * maxYPosition;
-            
-            // Right side
-            this.objects[this.size - 1][i].position.y = opacities[this.size - 1][i] * maxYPosition;
-            this.objects[this.size - 2][i].position.y = opacities[this.size - 2][i] * maxYPosition;
-            
-            // Back side
-            this.objects[i][0].position.y = opacities[i][0] * maxYPosition;
-            this.objects[i][1].position.y = opacities[i][1] * maxYPosition;
-
-            // Forward side
-            this.objects[i][this.size - 1].position.y = opacities[i][this.size - 1] * maxYPosition;
-            this.objects[i][this.size - 2].position.y = opacities[i][this.size - 2] * maxYPosition;
+        for (let x = 0; x < this.size; x++) {
+          for (let z = 0; z < this.size; z++) {
+            this.objects[x][z].material.color = this.objects[x][z].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacities[x][z]);
+            this.objects[x][z].position.y = opacities[x][z] * maxYPosition;
+          }
         }
     }
 }
