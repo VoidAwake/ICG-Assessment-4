@@ -1,6 +1,7 @@
-import * as THREE from '../node_modules/three/build/three.module.js';
+import * as THREE from './Dependencies/three.module.js';
 import { Grid } from './Grid.js';
 import { CameraController } from './CameraController.js';
+
 
 const scene = new THREE.Scene();
 const ratio = window.innerWidth / window.innerHeight;

@@ -1,4 +1,4 @@
-import * as THREE from '../node_modules/three/build/three.module.js';
+import * as THREE from './Dependencies/PointerLockControls.js';
 import { GridMesh } from './GridMesh.js';
 
 class Grid {
