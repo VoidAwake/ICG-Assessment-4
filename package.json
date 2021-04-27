@@ -19,6 +19,7 @@
   "homepage": "https://github.com/VoidAwake/CGraphics#readme",
   "dependencies": {
     "@types/three": "^0.125.3",
+    "@voidawake/3d-wfc-js": "^1.1.0",
     "three": "^0.126.1"
   }
 }
