@@ -10,8 +10,6 @@ class Grid {
         this.group = new THREE.Group();
         this.origin = new THREE.Vector3(0, 0, 0);
         this.baseCameraOffset = this.getCameraOffset();
-        this.cameraOffsetDelta = 0;
-        this.clampedCameraOffsetDelta = 0;
     
         for (let x = 0; x < this.size; x++) {
             this.objects[x] = new Array();
@@ -78,8 +76,6 @@ class Grid {
                 }
             }
         }
-        
-        this.fadeSides();
     }
 
     addNewMesh (x, z) {
@@ -99,29 +95,28 @@ class Grid {
     }
 
     update () {
-        this.updateCameraOffsetDelta();
-
-        this.updateClampedCameraOffsetDelta();
-
-        this.fadeSides();
+        const cameraOffsetDelta = this.baseCameraOffset.clone().sub(this.getCameraOffset());
+        const clampedCameraOffsetDelta = cameraOffsetDelta.clone().divideScalar(this.spacing);
 
         // Move the grid
     
-        if (this.clampedCameraOffsetDelta.x > 1) {
+        if (clampedCameraOffsetDelta.x > 1) {
             this.move("left");
         }
     
-        if (this.clampedCameraOffsetDelta.x < -1) {
+        if (clampedCameraOffsetDelta.x < -1) {
             this.move("right");
         }
     
-        if (this.clampedCameraOffsetDelta.z > 1) {
+        if (clampedCameraOffsetDelta.z > 1) {
             this.move("back");
         }
     
-        if (this.clampedCameraOffsetDelta.z < -1) {
+        if (clampedCameraOffsetDelta.z < -1) {
             this.move("forward");
         }
+
+        this.fadeSides(clampedCameraOffsetDelta);
     }
 
     getCameraOffset () {
@@ -130,21 +125,9 @@ class Grid {
         return cameraOffset;
     }
 
-    updateCameraOffsetDelta () {
-        let cameraOffsetDelta = this.baseCameraOffset.clone();
-        cameraOffsetDelta.sub(this.getCameraOffset());
-        this.cameraOffsetDelta = cameraOffsetDelta;
-    }
-
-    updateClampedCameraOffsetDelta () {
-        let clampedCameraOffsetDelta = this.cameraOffsetDelta.clone();
-        clampedCameraOffsetDelta.divideScalar(this.spacing);
-        this.clampedCameraOffsetDelta = clampedCameraOffsetDelta;
-    }
-
-    fadeSides () {
-        const clampedDeltaX = this.clampedCameraOffsetDelta.x;
-        const clampedDeltaZ = this.clampedCameraOffsetDelta.z;
+    fadeSides (clampedCameraOffsetDelta) {
+        const clampedDeltaX = clampedCameraOffsetDelta.x;
+        const clampedDeltaZ = clampedCameraOffsetDelta.z;
 
         const positiveClampedX = clampedDeltaX > 0 ? clampedDeltaX : 0;
         const negativeClampedX = clampedDeltaX < 0 ? clampedDeltaX : 0;
