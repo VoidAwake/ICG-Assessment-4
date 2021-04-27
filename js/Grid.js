@@ -20,105 +20,65 @@ class Grid {
                 this.addNewMesh(x, z);
             }
         }
+
+        this.directionOffsets = {
+          "left": new THREE.Vector3 (-this.spacing, 0, 0),
+          "right": new THREE.Vector3 (this.spacing, 0, 0),
+          "back": new THREE.Vector3 (0, 0, -this.spacing),
+          "forward": new THREE.Vector3 (0, 0, this.spacing)
+        }
     }
 
-    moveLeft () {
-        console.log("Move Grid Left");
+    move (direction) {
+        console.log("Move Grid " + direction);
 
-        this.origin.add(new THREE.Vector3 (-this.spacing, 0, 0));
+        this.origin.add(this.directionOffsets[direction]);
+        this.baseCameraOffset.add(this.directionOffsets[direction]);
 
-        for (let x = this.size - 1; x >= 0; x--) {
-            for (let z = 0; z < this.size; z++) {
-                // Destroy the left side of the grid
-                if (x == this.size - 1) {
-                    this.group.remove(this.objects[x][z]);
+        if (direction == "left" || direction == "right") {
+            const xFirst = direction == "left" ? this.size - 1 : 0;
+            const xLast = direction == "left" ? 0 : this.size - 1;
+            const xInc = direction == "left" ? -1 : 1;
+
+            for (let x = xFirst; Math.abs(xFirst - x) <= Math.abs(xLast - xFirst); x += xInc) {
+                for (let z = 0; z < this.size; z++) {
+                    // Destroy the left side of the grid
+                    if (x == xFirst) {
+                        this.group.remove(this.objects[x][z]);
+                    }
+
+                    // Move all grid items left
+                    if (x != xLast) {
+                        this.objects[x][z] = this.objects[x + xInc][z];
+                    } else {
+                        // Create new objects in left side of grid
+                        this.addNewMesh(x, z);
+                    }
                 }
+            }
+          } else {
+            const zFirst = direction == "back" ? this.size - 1 : 0;
+            const zLast = direction == "back" ? 0 : this.size - 1;
+            const zInc = direction == "back" ? -1 : 1;
 
-                // Move all grid items left
-                if (x != 0) {
-                    this.objects[x][z] = this.objects[x - 1][z];
-                } else {
-                    // Create new objects in left side of grid
-                    this.addNewMesh(x, z);
+            for (let x = 0; x < this.size; x++) {
+                for (let z = zFirst; Math.abs(zFirst - z) <= Math.abs(zLast - zFirst); z += zInc) {
+                    // Destroy the left side of the grid
+                    if (z == zFirst) {
+                        this.group.remove(this.objects[x][z]);
+                    }
+
+                    // Move all grid items left
+                    if (z != zLast) {
+                        this.objects[x][z] = this.objects[x][z + zInc];
+                    } else {
+                        // Create new objects in left side of grid
+                        this.addNewMesh(x, z);
+                    }
                 }
             }
         }
-
-        this.fadeSides();
-    }
-
-    moveRight () {
-        console.log("Move Grid Right");
-
-        this.origin.add(new THREE.Vector3 (this.spacing, 0, 0));
-
-        for (let x = 0; x < this.size; x++) {
-            for (let z = 0; z < this.size; z++) {
-                // Destroy the left side of the grid
-                if (x == 0) {
-                    this.group.remove(this.objects[x][z]);
-                }
-
-                // Move all grid items left
-                if (x != this.size - 1) {
-                    this.objects[x][z] = this.objects[x + 1][z];
-                } else {
-                    // Create new objects in left side of grid
-                    this.addNewMesh(x, z);
-                }
-            }
-        }
-
-        this.fadeSides();
-    }
-
-    moveBack () {
-        console.log("Move Grid Back");
-
-        this.origin.add(new THREE.Vector3 (0, 0, -this.spacing));
-
-        for (let x = 0; x < this.size; x++) {
-            for (let z = this.size - 1; z >= 0; z--) {
-                // Destroy the left side of the grid
-                if (z == this.size - 1) {
-                    this.group.remove(this.objects[x][z]);
-                }
-
-                // Move all grid items left
-                if (z != 0) {
-                    this.objects[x][z] = this.objects[x][z - 1];
-                } else {
-                    // Create new objects in left side of grid
-                    this.addNewMesh(x, z);
-                }
-            }
-        }
-
-        this.fadeSides();
-    }
-
-    moveForward () {
-        console.log("Move Grid Forward");
-
-        this.origin.add(new THREE.Vector3 (0, 0, this.spacing));
-
-        for (let x = 0; x < this.size; x++) {
-            for (let z = 0; z < this.size; z++) {
-                // Destroy the left side of the grid
-                if (z == 0) {
-                    this.group.remove(this.objects[x][z]);
-                }
-
-                // Move all grid items left
-                if (z != this.size - 1) {
-                    this.objects[x][z] = this.objects[x][z + 1];
-                } else {
-                    // Create new objects in left side of grid
-                    this.addNewMesh(x, z);
-                }
-            }
-        }
-
+        
         this.fadeSides();
     }
 
@@ -148,27 +108,19 @@ class Grid {
         // Move the grid
     
         if (this.clampedCameraOffsetDelta.x > 1) {
-            this.moveLeft();
-    
-            this.baseCameraOffset.add(new THREE.Vector3(-this.spacing, 0, 0));
+            this.move("left");
         }
     
         if (this.clampedCameraOffsetDelta.x < -1) {
-            this.moveRight();
-    
-            this.baseCameraOffset.add(new THREE.Vector3(this.spacing, 0, 0));
+            this.move("right");
         }
     
         if (this.clampedCameraOffsetDelta.z > 1) {
-            this.moveBack();
-    
-            this.baseCameraOffset.add(new THREE.Vector3(0, 0, -this.spacing));
+            this.move("back");
         }
     
         if (this.clampedCameraOffsetDelta.z < -1) {
-            this.moveForward();
-    
-            this.baseCameraOffset.add(new THREE.Vector3(0, 0, this.spacing));
+            this.move("forward");
         }
     }
 
