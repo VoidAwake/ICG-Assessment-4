@@ -20,61 +20,44 @@ class Grid {
         }
 
         this.directionOffsets = {
-          "left": new THREE.Vector3 (-this.spacing, 0, 0),
-          "right": new THREE.Vector3 (this.spacing, 0, 0),
-          "back": new THREE.Vector3 (0, 0, -this.spacing),
-          "forward": new THREE.Vector3 (0, 0, this.spacing)
+          "right":    new THREE.Vector3 ( this.spacing, 0, 0),
+          "left":     new THREE.Vector3 (-this.spacing, 0, 0),
+          "forward":  new THREE.Vector3 (0, 0,  this.spacing),
+          "back":     new THREE.Vector3 (0, 0, -this.spacing),
+        }
+
+        this.directionFunctions = {
+          "right":    (i, j) => new THREE.Vector3(i, 0, j),
+          "left":     (i, j) => new THREE.Vector3(this.size - i - 1, 0, j),
+          "forward":  (i, j) => new THREE.Vector3(j, 0, i),
+          "back":     (i, j) => new THREE.Vector3(j, 0, this.size - i - 1),
         }
     }
 
     move (direction) {
-        console.log("Move Grid " + direction);
+        console.log("Move grid " + direction);
 
         this.origin.add(this.directionOffsets[direction]);
         this.baseCameraOffset.add(this.directionOffsets[direction]);
 
-        if (direction == "left" || direction == "right") {
-            const xFirst = direction == "left" ? this.size - 1 : 0;
-            const xLast = direction == "left" ? 0 : this.size - 1;
-            const xInc = direction == "left" ? -1 : 1;
+        for (let i = 0; i < this.size; i++) {
+          for (let j = 0; j < this.size; j++) {
+            const coords = this.directionFunctions[direction](i, j);
+            const nextCoords = this.directionFunctions[direction](i + 1, j);
 
-            for (let x = xFirst; Math.abs(xFirst - x) <= Math.abs(xLast - xFirst); x += xInc) {
-                for (let z = 0; z < this.size; z++) {
-                    // Destroy the left side of the grid
-                    if (x == xFirst) {
-                        this.group.remove(this.objects[x][z]);
-                    }
-
-                    // Move all grid items left
-                    if (x != xLast) {
-                        this.objects[x][z] = this.objects[x + xInc][z];
-                    } else {
-                        // Create new objects in left side of grid
-                        this.addNewMesh(x, z);
-                    }
-                }
+            if (i == 0) {
+                // Destroy the one side of the grid
+                this.group.remove(this.objects[coords.x][coords.z]);
             }
-          } else {
-            const zFirst = direction == "back" ? this.size - 1 : 0;
-            const zLast = direction == "back" ? 0 : this.size - 1;
-            const zInc = direction == "back" ? -1 : 1;
 
-            for (let x = 0; x < this.size; x++) {
-                for (let z = zFirst; Math.abs(zFirst - z) <= Math.abs(zLast - zFirst); z += zInc) {
-                    // Destroy the left side of the grid
-                    if (z == zFirst) {
-                        this.group.remove(this.objects[x][z]);
-                    }
-
-                    // Move all grid items left
-                    if (z != zLast) {
-                        this.objects[x][z] = this.objects[x][z + zInc];
-                    } else {
-                        // Create new objects in left side of grid
-                        this.addNewMesh(x, z);
-                    }
-                }
+            if (i != this.size - 1) {
+                // Move all grid items
+                this.objects[coords.x][coords.z] = this.objects[nextCoords.x][nextCoords.z];
+            } else {
+                // Create new objects on the other side of the grid
+                this.addNewMesh(coords.x, coords.z);
             }
+          }
         }
     }
 
