@@ -2,6 +2,7 @@ import * as THREE from '../node_modules/three/build/three.module.js';
 import { Grid } from "./Grid.js";
 import { CameraController } from "./CameraController.js";
 //import { FBXLoader } from './jsm/loaders/FBXLoader.js';
+import { FBXLoader } from '../node_modules/three/examples/jsm/loaders/FBXLoader.js';
 import { GLTFLoader } from '../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 
 const scene = new THREE.Scene();
@@ -13,17 +14,17 @@ const camera = new THREE.PerspectiveCamera(
     0.1,
     1000
 );
-/* var loader = new THREE.FBXLoader();
+ var loader = new FBXLoader();
 
-loader.load( 'Assets/AurynSky/Forest Pack/Models/ForestBlock02.FBX', function ( object ) {
+loader.load( '../ForestCastle.FBX', function ( object ) {
 
     scene.add( object );
 
 } );
-*/ 
+
  var loader = new GLTFLoader();
 
-loader.load( 'Assets/AurynSky/Forest Pack/ModelsglForestBlock01.gltf', function ( gltf ) {
+loader.load( '../glForestBlock01.gltf', function ( gltf ) {
 
 	scene.add( gltf.scene );
 
