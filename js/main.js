@@ -16,7 +16,7 @@ const camera = new THREE.PerspectiveCamera(
 );
  var loader = new FBXLoader();
 
-loader.load( '../ForestCastle.FBX', function ( object ) {
+loader.load( './Assets/AurynSky/Forest Pack/Models/ForestCastle.fbx', function ( object ) {
 
     scene.add( object );
 
@@ -24,7 +24,7 @@ loader.load( '../ForestCastle.FBX', function ( object ) {
 
  var loader = new GLTFLoader();
 
-loader.load( '../glForestBlock01.gltf', function ( gltf ) {
+loader.load( './Assets/AurynSky/Forest Pack/Models/glForestBlock01.gltf', function ( gltf ) {
 
 	scene.add( gltf.scene );
 
@@ -33,6 +33,10 @@ loader.load( '../glForestBlock01.gltf', function ( gltf ) {
 	console.error( error );
 
 } );
+
+//scene.background = new THREE.Color(0xFFFFFF)
+var light = new THREE.HemisphereLight(0xFFFFFF, 0x000000, 2); 
+scene.add(light); 
 
 camera.position.set(13, 25, 30);
 camera.lookAt(13, 0, 15);
