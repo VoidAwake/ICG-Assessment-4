@@ -11,6 +11,7 @@ class Grid {
         this.origin = new THREE.Vector3(0, 0, 0);
         this.originalCameraOffset = this.getCameraOffset();
         this.baseCameraOffset = this.getCameraOffset();
+        this.width = (this.size - 1) * this.spacing;
     
         for (let x = 0; x < this.size; x++) {
             this.objects[x] = new Array();
@@ -114,7 +115,7 @@ class Grid {
 
       for (let x = 0; x < this.size; x++) {
         for (let z = 0; z < this.size; z++) {
-          const originToCentre = new THREE.Vector3((this.size - 1) * this.spacing * 0.5, 0, (this.size - 1) * this.spacing * 0.5);
+          const originToCentre = new THREE.Vector3(this.width * 0.5, 0, this.width * 0.5);
           const gridCentre = this.camera.position.clone().sub(this.originalCameraOffset).add(originToCentre);
           const distanceToObject = this.objects[x][z].position.distanceTo(gridCentre);
           const opacity = this.distanceToOpacity(distanceToObject);
@@ -126,10 +127,9 @@ class Grid {
     }
 
     distanceToOpacity (distance) {
-      const range = 12; // *** Should be calculated from spacing and size
       const steepness = 10;
 
-      return 1 - (1 / (1 + steepness * Math.pow(Math.E, distance - range)));
+      return 1 - (1 / (1 + steepness * Math.pow(Math.E, distance - this.width * 0.5)));
     }
 }
 
