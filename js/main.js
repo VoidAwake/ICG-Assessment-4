@@ -2,7 +2,7 @@ import * as THREE from '../node_modules/three/build/three.module.js';
 import { Grid } from "./Grid.js";
 import { CameraController } from "./CameraController.js";
 //import { FBXLoader } from './jsm/loaders/FBXLoader.js';
-import { GLTFLoader } from "./GLTFLoader.js";
+import { GLTFLoader } from '../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 
 const scene = new THREE.Scene();
 const ratio = window.innerWidth / window.innerHeight;
