@@ -9,6 +9,7 @@ class Grid {
         this.objects = new Array();
         this.group = new THREE.Group();
         this.origin = new THREE.Vector3(0, 0, 0);
+        this.originalCameraOffset = this.getCameraOffset();
         this.baseCameraOffset = this.getCameraOffset();
     
         for (let x = 0; x < this.size; x++) {
@@ -99,7 +100,7 @@ class Grid {
             this.move("forward");
         }
 
-        this.fadeSides(clampedCameraOffsetDelta);
+        this.fadeSides();
     }
 
     getCameraOffset () {
@@ -108,57 +109,28 @@ class Grid {
         return cameraOffset;
     }
 
-    fadeSides (clampedCameraOffsetDelta) {
-        const clampedDeltaX = clampedCameraOffsetDelta.x;
-        const clampedDeltaZ = clampedCameraOffsetDelta.z;
+    fadeSides () {
+      const maxYPosition = -4;
 
-        const positiveClampedX = clampedDeltaX > 0 ? clampedDeltaX : 0;
-        const negativeClampedX = clampedDeltaX < 0 ? clampedDeltaX : 0;
+      for (let x = 0; x < this.size; x++) {
+        for (let z = 0; z < this.size; z++) {
+          const originToCentre = new THREE.Vector3((this.size - 1) * this.spacing * 0.5, 0, (this.size - 1) * this.spacing * 0.5);
+          const gridCentre = this.camera.position.clone().sub(this.originalCameraOffset).add(originToCentre);
+          const distanceToObject = this.objects[x][z].position.distanceTo(gridCentre);
+          const opacity = this.distanceToOpacity(distanceToObject);
 
-        const positiveClampedZ = clampedDeltaZ > 0 ? clampedDeltaZ : 0;
-        const negativeClampedZ = clampedDeltaZ < 0 ? clampedDeltaZ : 0;
-
-        // Construct an array of opacities
-        const opacities = new Array();
-
-        for (let x = 0; x < this.size; x++) {
-            opacities[x] = new Array();
-
-            for (let z = 0; z < this.size; z++) {
-                opacities[x][z] = 0;
-            }
+          this.objects[x][z].material.color = this.objects[x][z].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacity);
+          this.objects[x][z].position.y = opacity * maxYPosition;
         }
+      }
+    }
 
-        // Set opacity values
+    distanceToOpacity (distance) {
+      const range = 12; // *** Should be calculated from spacing and size
+      const steepness = 10;
 
-        for (let i = 0; i < this.size; i++) {
-            // Left side
-            opacities[0][i] = Math.max(opacities[0][i], 1 - (positiveClampedX));
-            opacities[1][i] = Math.max(opacities[1][i], (-1 * negativeClampedX));
-            
-            // Right side
-            opacities[this.size - 1][i] = Math.max(opacities[this.size - 1][i], 1 - (-1 * negativeClampedX));
-            opacities[this.size - 2][i] = Math.max(opacities[this.size - 2][i], positiveClampedX);
-            
-            // Back side
-            opacities[i][0] = Math.max(opacities[i][0], 1 - (positiveClampedZ));
-            opacities[i][1] = Math.max(opacities[i][1], (-1 * negativeClampedZ));
-
-            // Forward side
-            opacities[i][this.size - 1] = Math.max(opacities[i][this.size - 1], 1 - (-1 * negativeClampedZ));
-            opacities[i][this.size - 2] = Math.max(opacities[i][this.size - 2], positiveClampedZ);
-        }
-
-        const maxYPosition = -4;
-
-        // Apply opacities to objects
-        for (let x = 0; x < this.size; x++) {
-          for (let z = 0; z < this.size; z++) {
-            this.objects[x][z].material.color = this.objects[x][z].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacities[x][z]);
-            this.objects[x][z].position.y = opacities[x][z] * maxYPosition;
-          }
-        }
+      return 1 - (1 / (1 + steepness * Math.pow(Math.E, distance - range)));
     }
 }
 
-export {Grid};
+export { Grid };
