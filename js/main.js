@@ -16,17 +16,16 @@ const camera = new THREE.PerspectiveCamera(
 );
  var loader = new FBXLoader();
 
-    loader.load( './Assets/AurynSky/Forest Pack/Models/ForestCastle.fbx', function ( object ) {
+loader.load( './Assets/AurynSky/Forest Pack/Models/ForestCastle.fbx', function ( object ) {
 
     scene.add( object );
 
+} );
 
  var loader = new GLTFLoader();
 
-    loader.load( './Assets/AurynSky/Forest Pack/Models/glForestBlock01.gltf', function ( gltf ) {
-    
-        
-    
+loader.load( './Assets/AurynSky/Forest Pack/Models/glForestBlock01.gltf', function ( gltf ) {
+
 	scene.add( gltf.scene );
 
 }, undefined, function ( error ) {
