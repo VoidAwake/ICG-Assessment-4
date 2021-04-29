@@ -16,7 +16,7 @@ const camera = new THREE.PerspectiveCamera(
 );
  var loader = new FBXLoader();
 
-loader.load( './Assets/AurynSky/Forest Pack/Models/ForestCastle.fbx', function ( object ) {
+ loader.load( './Assets/AurynSky/Dungeon Pack/Models/CastleD.fbx', function ( object ) {
 
     scene.add( object );
 
