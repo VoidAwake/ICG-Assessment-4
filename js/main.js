@@ -16,13 +16,13 @@ const camera = new THREE.PerspectiveCamera(
 );
  var loader = new FBXLoader();
 
- loader.load( './Assets/AurynSky/Dungeon Pack/Models/CastleD.fbx', function ( object ) {
+loader.load( './Assets/AurynSky/Forest Pack/Models/ForestTower.fbx', function ( object ) {
 
     scene.add( object );
 
 } );
 
- var loader = new GLTFLoader();
+ /* var loader = new GLTFLoader();
 
 loader.load( './Assets/AurynSky/Forest Pack/Models/glForestBlock01.gltf', function ( gltf ) {
 
@@ -33,7 +33,7 @@ loader.load( './Assets/AurynSky/Forest Pack/Models/glForestBlock01.gltf', functi
 	console.error( error );
 
 } );
-
+*/
 //scene.background = new THREE.Color(0xFFFFFF)
 var light = new THREE.HemisphereLight(0xFFFFFF, 0x000000, 2); 
 scene.add(light); 
