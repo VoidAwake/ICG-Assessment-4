@@ -22,18 +22,6 @@ loader.load( './Assets/AurynSky/Forest Pack/Models/ForestTower.fbx', function ( 
 
 } );
 
- /* var loader = new GLTFLoader();
-
-loader.load( './Assets/AurynSky/Forest Pack/Models/glForestBlock01.gltf', function ( gltf ) {
-
-	scene.add( gltf.scene );
-
-}, undefined, function ( error ) {
-
-	console.error( error );
-
-} );
-*/
 //scene.background = new THREE.Color(0xFFFFFF)
 var light = new THREE.HemisphereLight(0xFFFFFF, 0x000000, 2); 
 scene.add(light); 
