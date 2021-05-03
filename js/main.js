@@ -14,7 +14,7 @@ const camera = new THREE.PerspectiveCamera(
     0.1,
     1000
 );
- var loader = new FBXLoader();
+ /* var loader = new FBXLoader();
 
 loader.load( './Assets/AurynSky/Forest Pack/Models/test.fbx', function ( object ) {
     //object.scale.set(0.5, 0.5, 0.5) //sets size of object 
@@ -22,7 +22,7 @@ loader.load( './Assets/AurynSky/Forest Pack/Models/test.fbx', function ( object 
     scene.add( object );
 
 } );
-
+*/ 
   var loader = new GLTFLoader();
 
 loader.load( './Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb', function ( gltf ) {
