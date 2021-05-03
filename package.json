@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/VoidAwake/CGraphics#readme",
   "dependencies": {
+    "@types/dat.gui": "^0.7.6",
     "@types/three": "^0.125.3",
+    "dat.gui": "^0.7.7",
     "three": "^0.126.1"
   }
 }
