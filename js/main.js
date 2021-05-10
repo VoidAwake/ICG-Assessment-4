@@ -14,27 +14,36 @@ const camera = new THREE.PerspectiveCamera(
     0.1,
     1000
 );
- /* var loader = new FBXLoader();
 
-loader.load( './Assets/AurynSky/Forest Pack/Models/test.fbx', function ( object ) {
-    //object.scale.set(0.5, 0.5, 0.5) //sets size of object 
-  //var blockOne = object; 
-    scene.add( object );
-
-} );
-*/ 
-  var loader = new GLTFLoader();
+/* 
+//Fbx Loader
+  var loader = new FBXLoader();
   for (var i = 0; i < 15; i++) {
-loader.load( './Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb', function ( gltf ) {
+loader.load( './Assets/AurynSky/Forest Pack/Models/test.fbx', function ( object ) {
+    object.castShadow = true;
+    object.receiveShadow = true;
+    object.scale.set(0.5, 0.5, 0.5) //sets size of object 
+    object.position.set(0,0,5)
+  //var blockOne = object; 
+    //scene.add( object );
+    objGroup.add(object);
+    scene.add(objGroup);
+} );
 
-    var forestBlock = gltf.scene;  
-   
-    
-    forestBlock.position.set(0,0,0)
-	scene.add( forestBlock );
-    scene.add( forestBlock );
-    console.log(position);
-    objGroup.add(forestBlock);
+  }
+ */ 
+
+ 
+  var loader = new GLTFLoader();
+  for (let i = 0; i < 15; i++) {
+  loader.load( './Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb', function ( gltf ) {
+
+  var forestBlock = gltf.scene;  
+  forestBlock.position.set(0,0,i);
+	//scene.add( forestBlock );
+   //scene.add( forestBlock );
+   console.log(forestBlock.position);
+   objGroup.add(forestBlock);
 
 }, undefined, function ( error ) {
 
@@ -43,6 +52,8 @@ loader.load( './Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb', f
 } );
 scene.add(objGroup);
   } 
+
+
 //scene.background = new THREE.Color(0xFFFFFF)
 var light = new THREE.HemisphereLight(0xFFFFFF, 0x000000, 2); 
 scene.add(light); 
