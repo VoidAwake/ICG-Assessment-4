@@ -4,7 +4,7 @@ import { CameraController } from "./CameraController.js";
 //import { FBXLoader } from './jsm/loaders/FBXLoader.js';
 import { FBXLoader } from '../node_modules/three/examples/jsm/loaders/FBXLoader.js';
 import { GLTFLoader } from '../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
-
+var objGroup = new THREE.Group();
 const scene = new THREE.Scene();
 const ratio = window.innerWidth / window.innerHeight;
 
@@ -24,23 +24,25 @@ loader.load( './Assets/AurynSky/Forest Pack/Models/test.fbx', function ( object 
 } );
 */ 
   var loader = new GLTFLoader();
-
+  for (var i = 0; i < 15; i++) {
 loader.load( './Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb', function ( gltf ) {
 
     var forestBlock = gltf.scene;  
-    for (var i = 0; i < 15; i++) {
+   
     
-    forestBlock.position.set(0,0,i)
+    forestBlock.position.set(0,0,0)
 	scene.add( forestBlock );
     scene.add( forestBlock );
-    console.log(i);
-    } 
+    console.log(position);
+    objGroup.add(forestBlock);
+
 }, undefined, function ( error ) {
 
 	console.error( error );
 
 } );
-
+scene.add(objGroup);
+  } 
 //scene.background = new THREE.Color(0xFFFFFF)
 var light = new THREE.HemisphereLight(0xFFFFFF, 0x000000, 2); 
 scene.add(light); 
