@@ -53,7 +53,7 @@ scene.add(objGroup);
 
 
 //scene.background = new THREE.Color(0xFFFFFF)
-var light = new THREE.HemisphereLight(0xFFFFFF, 0x000000, 2); 
+var light = new THREE.HemisphereLight(0xFFFFFF, 0x000000, 3); 
 scene.add(light); 
 
 camera.position.set(13, 25, 30);
