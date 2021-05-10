@@ -74,8 +74,8 @@ controls.enabled = true;
 				moveRight = true;
 				break;
 			case 32:
-				called = true;
-				rising = true;
+			//	called = true;
+		//		rising = true;
 				break;
 
 		}
