@@ -40,10 +40,8 @@ loader.load( './Assets/AurynSky/Forest Pack/Models/test.fbx', function ( object 
 
   var forestBlock = gltf.scene;  
   forestBlock.position.set(0,0,i);
-	//scene.add( forestBlock );
-   //scene.add( forestBlock );
-   console.log(forestBlock.position);
-   objGroup.add(forestBlock);
+  console.log(forestBlock.position);
+ objGroup.add(forestBlock);
 
 }, undefined, function ( error ) {
 
