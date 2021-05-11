@@ -1,5 +1,5 @@
-import * as THREE from './three.module.js';
-import { PointerLockControls } from "./PointerLockControls.js";
+import * as THREE from './Dependencies/three.module.js';
+import { PointerLockControls } from "./Dependencies/PointerLockControls.js"
 
 class CameraController {
     constructor (camera, speed) {

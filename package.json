@@ -19,6 +19,9 @@
   "homepage": "https://github.com/VoidAwake/CGraphics#readme",
   "dependencies": {
     "@types/three": "^0.125.3",
-    "three": "^0.126.1"
+    "physijs": "^1.0.4",
+    "three": "^0.126.1",
+    "uniq": "^1.0.1",
+    "user": "0.0.0"
   }
 }
