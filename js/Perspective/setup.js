@@ -3,6 +3,9 @@ import { PointerLockControls } from '../Dependencies/PointerLockControls.js';
 import * as THREE from '../Dependencies/three.module.js';
 import { OrbitControls } from 'https://threejsfundamentals.org/threejs/resources/threejs/r127/examples/jsm/controls/OrbitControls.js';
 import { GUI } from 'https://threejsfundamentals.org/threejs/../3rdparty/dat.gui.module.js';
+//import {loadModel} from "../loadModels.js";
+import {FBXLoader} from "../Dependencies/FBXLoader.js";
+
 
 var camera, scene, renderer, controls;
 var controlsEnabled = true;
@@ -21,6 +24,7 @@ var falling = false;
 var called = false;
 var timeS = 0;
 var clock;
+var loader = new FBXLoader();
 //var playerGeo = new THREE.CylinderGeometry(5, 5, 3, 10,10,FALSE,4,4);
 //var playerMaterial = new THREE.MeshBasicMaterial()
 //var playerMesh = new THREE.Mesh(playerGeo, playerMaterial);
@@ -41,6 +45,7 @@ function init() {
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
+  loadModel("../Assets/Darth_Artisan/Free_Trees/Meshes/Oak_Tree.fbx");
   controls = new PointerLockControls(camera, renderer.domElement);
   //	scene.add(playerMesh);
   document.addEventListener(
@@ -228,9 +233,32 @@ function getControls() {
   return controls;
 }
 var step = 1;
+var objects = new THREE.Group();
+
+function loadModel(model) {
+    
+    loader.load( model, function ( object ) {
+		console.log("load");
+        object.castShadow = true;
+        scene.add( object );
+        object.position.y = 0;
+        object.scale.multiplyScalar(5);
+		objects.add(object);
+    } );
+}
 
 function animate() {
   requestAnimationFrame(animate);
+
+  for ( var i = 0; i < objects.children.length; i ++ ) 
+  {
+	  if (objects.children[i].position.y < 2){
+		  objects.children[i].position.y += 0.02 * clock.getDelta();
+		  console.log(objects.children[i].position.y);
+	  }
+  }
+
+
   if (controlsEnabled == true) {
     var time = performance.now();
     var delta = (time - prevTime) / 1000;
@@ -282,6 +310,16 @@ function jumpRise() {
     step -= 0.1;
   }
   console.log(controls.getObject().position.y);
+}
+
+function rise(object) {
+	requestAnimationFrame(rise(object));
+  
+    if (object.position.y < 2) {
+        object.position.y += 0.02 * clock.getDelta();
+    }
+   
+    
 }
 
 init();
