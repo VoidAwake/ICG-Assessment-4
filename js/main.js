@@ -15,31 +15,17 @@ const camera = new THREE.PerspectiveCamera(
     1000
 );
 
-/* 
-//Fbx Loader
-  var loader = new FBXLoader();
-  for (var i = 0; i < 15; i++) {
-loader.load( './Assets/AurynSky/Forest Pack/Models/test.fbx', function ( object ) {
-    object.castShadow = true;
-    object.receiveShadow = true;
-    object.scale.set(0.5, 0.5, 0.5) //sets size of object 
-    object.position.set(0,0,5)
-  //var blockOne = object; 
-    //scene.add( object );
-    objGroup.add(object);
-    scene.add(objGroup);
-} );
-
-  }
- */ 
 
  
+// Models 
+
+//Plain forest block
   var loader = new GLTFLoader();
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 5; i++) {
   loader.load( './Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb', function ( gltf ) {
 
   var forestBlock = gltf.scene;  
-  forestBlock.position.set(0,0,i);
+  forestBlock.position.set(0,0,i*2);
   console.log(forestBlock.position);
  objGroup.add(forestBlock);
 
@@ -52,7 +38,47 @@ scene.add(objGroup);
   } 
 
 
-//scene.background = new THREE.Color(0xFFFFFF)
+  //Forest block with grass
+  var loader = new GLTFLoader();
+  for (let i = 0; i < 5; i++) {
+  loader.load( './Assets/AurynSky/Forest Pack/Models/ForestGrassBlender.gltf', function ( gltf ) {
+
+  var forestGrass= gltf.scene;  
+  forestGrass.position.set(3,0,i*2);
+  console.log(forestGrass.position);
+ objGroup.add(forestGrass);
+
+}, undefined, function ( error ) {
+
+	console.error( error );
+
+} );
+scene.add(objGroup);
+  } 
+
+  //Forest block with pinetree
+  var loader = new GLTFLoader();
+  for (let i = 0; i < 5; i++) {
+  loader.load( './Assets/AurynSky/Forest Pack/Models/ForestPineTreeBlender.gltf', function ( gltf ) {
+
+  var forestPineTree= gltf.scene;  
+  forestPineTree.position.set(6,0,i*2);
+  console.log(forestPineTree.position);
+ objGroup.add(forestPineTree);
+
+}, undefined, function ( error ) {
+
+	console.error( error );
+
+} );
+scene.add(objGroup);
+  } 
+
+
+
+
+
+
 var light = new THREE.HemisphereLight(0xFFFFFF, 0x000000, 3); 
 scene.add(light); 
 
