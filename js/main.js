@@ -194,13 +194,88 @@ scene.add(objGroup);
     } );
     scene.add(objGroup);
       } 
+
+
+    
+        //Ice block
+        var loader = new GLTFLoader();
+        for (let i = 0; i < 5; i++) {
+        loader.load( './Assets/AurynSky/WinterArena/Models/IceBlockBlender.glb', function ( gltf ) {
+      
+        var iceBlock= gltf.scene;  
+        iceBlock.position.set(30,0,i*2);
+       objGroup.add(iceBlock);
+      
+      }, undefined, function ( error ) {
+      
+        console.error( error );
+      
+      } );
+      scene.add(objGroup);
+        } 
+
+        
+        //Ice pinetree
+        var loader = new GLTFLoader();
+        for (let i = 0; i < 5; i++) {
+        loader.load( './Assets/AurynSky/WinterArena/Models/IcePineTreeBlender.glb', function ( gltf ) {
+      
+        var icePineTree= gltf.scene;  
+        icePineTree.position.set(33,0,i*2);
+       objGroup.add(icePineTree);
+      
+      }, undefined, function ( error ) {
+      
+        console.error( error );
+      
+      } );
+      scene.add(objGroup);
+        } 
+
+
+         //Ice small tree
+         var loader = new GLTFLoader();
+         for (let i = 0; i < 5; i++) {
+         loader.load( './Assets/AurynSky/WinterArena/Models/IceSmallTreeBlender.glb', function ( gltf ) {
+       
+         var iceSmallTree= gltf.scene;  
+         iceSmallTree.position.set(36,0,i*2);
+        objGroup.add(iceSmallTree);
+       
+       }, undefined, function ( error ) {
+       
+         console.error( error );
+       
+       } );
+       scene.add(objGroup);
+         } 
+
+
+          //Ice grass on block
+          var loader = new GLTFLoader();
+          for (let i = 0; i < 5; i++) {
+          loader.load( './Assets/AurynSky/WinterArena/Models/IceGrassBlender.glb', function ( gltf ) {
+        
+          var iceGrass= gltf.scene;  
+          iceGrass.position.set(39,0,i*2);
+         objGroup.add(iceGrass);
+        
+        }, undefined, function ( error ) {
+        
+          console.error( error );
+        
+        } );
+        scene.add(objGroup);
+          } 
+
+
   
   
 
 
 
 
-var light = new THREE.HemisphereLight(0xffffff, 0xffffff,3); 
+var light = new THREE.HemisphereLight(0xffffff, 0x000000, 4); 
 scene.add(light); 
 
 camera.position.set(13, 25, 30);
