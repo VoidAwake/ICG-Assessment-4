@@ -24,6 +24,7 @@ var falling = false;
 var called = false;
 var timeS = 0;
 var clock;
+var objects = new THREE.Group();
 var loader = new FBXLoader();
 //var playerGeo = new THREE.CylinderGeometry(5, 5, 3, 10,10,FALSE,4,4);
 //var playerMaterial = new THREE.MeshBasicMaterial()
@@ -40,13 +41,16 @@ function init() {
   var Dir = new THREE.Vector3(0, 0, 1);
   camera.lookAt(Dir.x, Dir.y, Dir.z);
   scene = new THREE.Scene();
-
+  
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
-  loadModel("../Assets/Darth_Artisan/Free_Trees/Meshes/Oak_Tree.fbx");
+  
   controls = new PointerLockControls(camera, renderer.domElement);
+  
+  loadModel("../../Assets/Darth_Artisan/Free_Trees/Meshes/Oak_Tree.fbx");
+  
   //	scene.add(playerMesh);
   document.addEventListener(
     'click',
@@ -233,30 +237,43 @@ function getControls() {
   return controls;
 }
 var step = 1;
-var objects = new THREE.Group();
+
 
 function loadModel(model) {
+    for (var i =0; i < 4; i++) {
+  loader.load( model, function ( object ) {
+    object.scale.multiplyScalar(0.05);
+    object.position.x = Math.random() * 5;
+    object.position.z = Math.random() * 5;
+    object.position.y = -20;
+   // scene.add( object );
     
-    loader.load( model, function ( object ) {
-		console.log("load");
-        object.castShadow = true;
-        scene.add( object );
-        object.position.y = 0;
-        object.scale.multiplyScalar(5);
-		objects.add(object);
-    } );
+    objects.add(object);
+    //object.receiveShadow = false;
+    object.castShadow=true
+
+}, undefined, function ( e ) {
+
+  console.error( e );
+
+} );
+    }
+  scene.add(objects);
 }
+
+
+
 
 function animate() {
   requestAnimationFrame(animate);
 
   for ( var i = 0; i < objects.children.length; i ++ ) 
   {
-	  if (objects.children[i].position.y < 2){
-		  objects.children[i].position.y += 0.02 * clock.getDelta();
+	  if (objects.children[i].position.y < 0){
+		  objects.children[i].position.y += 0.6 * clock.getDelta() * 9;
 		  console.log(objects.children[i].position.y);
 	  }
-  }
+  } 
 
 
   if (controlsEnabled == true) {
@@ -291,6 +308,7 @@ function animate() {
   }
 
   renderer.render(scene, camera);
+  
 }
 
 function jumpRise() {
