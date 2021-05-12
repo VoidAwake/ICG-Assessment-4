@@ -45,7 +45,6 @@ scene.add(objGroup);
 
   var forestGrass= gltf.scene;  
   forestGrass.position.set(3,0,i*2);
-  console.log(forestGrass.position);
  objGroup.add(forestGrass);
 
 }, undefined, function ( error ) {
@@ -63,7 +62,6 @@ scene.add(objGroup);
 
   var forestPineTree= gltf.scene;  
   forestPineTree.position.set(6,0,i*2);
-  console.log(forestPineTree.position);
  objGroup.add(forestPineTree);
 
 }, undefined, function ( error ) {
@@ -73,6 +71,43 @@ scene.add(objGroup);
 } );
 scene.add(objGroup);
   } 
+
+  //Forest block with small tree
+  var loader = new GLTFLoader();
+  for (let i = 0; i < 5; i++) {
+  loader.load( './Assets/AurynSky/Forest Pack/Models/ForestTreeSmallBlender.glb', function ( gltf ) {
+
+  var forestSmallTree= gltf.scene;  
+  forestSmallTree.position.set(9,0,i*2);
+ objGroup.add(forestSmallTree);
+
+}, undefined, function ( error ) {
+
+	console.error( error );
+
+} );
+scene.add(objGroup);
+  } 
+
+
+  //Forest crate
+  var loader = new GLTFLoader();
+  for (let i = 0; i < 5; i++) {
+  loader.load( './Assets/AurynSky/Forest Pack/Models/ForestCrateBlender.glb', function ( gltf ) {
+
+  var forestCrate= gltf.scene;  
+  forestCrate.position.set(12,0,i*2);
+ objGroup.add(forestCrate);
+
+}, undefined, function ( error ) {
+
+	console.error( error );
+
+} );
+scene.add(objGroup);
+  } 
+
+
 
 
 
