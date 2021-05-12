@@ -268,6 +268,42 @@ scene.add(objGroup);
         scene.add(objGroup);
           } 
 
+          //Dungeon Block
+          var loader = new GLTFLoader();
+          for (let i = 0; i < 5; i++) {
+          loader.load( './Assets/AurynSky/Dungeon Pack/Models/DungeonBlockBlender.glb', function ( gltf ) {
+        
+          var DungeonBlock= gltf.scene;  
+          DungeonBlock.position.set(42,0,i*2);
+         objGroup.add(DungeonBlock);
+        
+        }, undefined, function ( error ) {
+        
+          console.error( error );
+        
+        } );
+        scene.add(objGroup);
+          } 
+
+
+           //Dungeon Banner 
+           var loader = new GLTFLoader();
+           for (let i = 0; i < 5; i++) {
+           loader.load( './Assets/AurynSky/Dungeon Pack/Models/DungeonBannerBlender.glb', function ( gltf ) {
+         
+           var DungeonBanner= gltf.scene;  
+           DungeonBanner.position.set(45,0,i*2);
+          objGroup.add(DungeonBanner);
+         
+         }, undefined, function ( error ) {
+         
+           console.error( error );
+         
+         } );
+         scene.add(objGroup);
+           } 
+ 
+
 
   
   
