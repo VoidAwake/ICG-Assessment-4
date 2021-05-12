@@ -107,14 +107,100 @@ scene.add(objGroup);
 scene.add(objGroup);
   } 
 
+    //Snow Block
+    var loader = new GLTFLoader();
+    for (let i = 0; i < 5; i++) {
+    loader.load( './Assets/AurynSky/WinterArena/Models/SnowRockGroundBlender.glb', function ( gltf ) {
+  
+    var snowBlock= gltf.scene;  
+    snowBlock.position.set(15,0,i*2);
+   objGroup.add(snowBlock);
+  
+  }, undefined, function ( error ) {
+  
+    console.error( error );
+  
+  } );
+  scene.add(objGroup);
+    } 
+
+
+    //Snow pinetree
+    var loader = new GLTFLoader();
+    for (let i = 0; i < 5; i++) {
+    loader.load( './Assets/AurynSky/WinterArena/Models/SnowPineTreeBlender.glb', function ( gltf ) {
+  
+    var snowPineTree= gltf.scene;  
+    snowPineTree.position.set(18,0,i*2);
+   objGroup.add(snowPineTree);
+  
+  }, undefined, function ( error ) {
+  
+    console.error( error );
+  
+  } );
+  scene.add(objGroup);
+    } 
+
+
+    //Snow apple tree
+    var loader = new GLTFLoader();
+    for (let i = 0; i < 5; i++) {
+    loader.load( './Assets/AurynSky/WinterArena/Models/SnowAppleTreeBlender.glb', function ( gltf ) {
+  
+    var snowAppleTree= gltf.scene;  
+    snowAppleTree.position.set(21,0,i*2);
+   objGroup.add(snowAppleTree);
+  
+  }, undefined, function ( error ) {
+  
+    console.error( error );
+  
+  } );
+  scene.add(objGroup);
+    } 
+
+
+      //Snow torch
+      var loader = new GLTFLoader();
+      for (let i = 0; i < 5; i++) {
+      loader.load( './Assets/AurynSky/WinterArena/Models/SnowTorchBlender.glb', function ( gltf ) {
+    
+      var snowTorch= gltf.scene;  
+      snowTorch.position.set(24,0,i*2);
+     objGroup.add(snowTorch);
+    
+    }, undefined, function ( error ) {
+    
+      console.error( error );
+    
+    } );
+    scene.add(objGroup);
+      } 
+
+      //Snow flag
+      var loader = new GLTFLoader();
+      for (let i = 0; i < 5; i++) {
+      loader.load( './Assets/AurynSky/WinterArena/Models/SnowFlagBlender.glb', function ( gltf ) {
+    
+      var snowFlag= gltf.scene;  
+      snowFlag.position.set(27,0,i*2);
+     objGroup.add(snowFlag);
+    
+    }, undefined, function ( error ) {
+    
+      console.error( error );
+    
+    } );
+    scene.add(objGroup);
+      } 
+  
+  
 
 
 
 
-
-
-
-var light = new THREE.HemisphereLight(0xFFFFFF, 0x000000, 3); 
+var light = new THREE.HemisphereLight(0xffffff, 0xffffff,3); 
 scene.add(light); 
 
 camera.position.set(13, 25, 30);
