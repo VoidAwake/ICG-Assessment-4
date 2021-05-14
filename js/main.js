@@ -24,15 +24,17 @@ function getScene() {
  
 // Models 
 
-const wait=ms=>new Promise(resolve => setTimeout(resolve, ms));
 
-async function loadModel() {
+ function loadModel() {
   //return new Promise((resolve) => { 
 
 //Plain forest block
   var loader = new GLTFLoader();
   //for (let i = 0; i < 5; i++) {
-  loader.loadAsync( './Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb', function ( gltf ) {
+    return new Promise(resolve => {
+      new GLTFLoader().load('./Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb', function ( gltf ) {
+    
+  //loader.loadAsync( './Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb', function ( gltf ) {
     
 
   var forestBlock = gltf.scene;  
@@ -42,7 +44,7 @@ async function loadModel() {
   //objGroup.add(forestBlock);
  console.log(forestBlock);
  
-  return forestBlock; 
+  return Promise.resolve(); 
   
 
 }, undefined, function ( error ) {
@@ -53,7 +55,7 @@ async function loadModel() {
 //scene.add(objGroup);
  // } 
 
-//});
+});
 }
 
 

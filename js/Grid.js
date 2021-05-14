@@ -128,7 +128,7 @@ class Grid {
 
         var newMesh = loadModel();
         //scene.add(objGroup);
-        
+        console.log(newMesh);
         
 
         let positionInGrid = new THREE.Vector3(x, 0, z).multiplyScalar(this.spacing);
@@ -242,7 +242,7 @@ class Grid {
         for (let i = 0; i < this.size; i++) {
         // Apply opacities to objects
             // Left side
-            this.objects[0][i].material.color = this.objects[0][i].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacities[0][i]);
+          /*  this.objects[0][i].material.color = this.objects[0][i].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacities[0][i]);
             this.objects[1][i].material.color = this.objects[1][i].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacities[1][i]);
             
             // Right side
@@ -255,7 +255,7 @@ class Grid {
 
             // Forward side
             this.objects[i][this.size - 1].material.color = this.objects[i][this.size - 1].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacities[i][this.size - 1]);
-            this.objects[i][this.size - 2].material.color = this.objects[i][this.size - 2].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacities[i][this.size - 2]);
+            this.objects[i][this.size - 2].material.color = this.objects[i][this.size - 2].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacities[i][this.size - 2]); */
 
         // Set Y positions
             // Left side
