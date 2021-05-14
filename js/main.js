@@ -4,6 +4,8 @@ import { CameraController } from "./CameraController.js";
 //import { FBXLoader } from './jsm/loaders/FBXLoader.js';
 import { FBXLoader } from '../node_modules/three/examples/jsm/loaders/FBXLoader.js';
 import { GLTFLoader } from '../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
+//import {loadModel} from "./loadModel.js"
+
 var objGroup = new THREE.Group();
 const scene = new THREE.Scene();
 const ratio = window.innerWidth / window.innerHeight;
@@ -15,30 +17,47 @@ const camera = new THREE.PerspectiveCamera(
     1000
 );
 
+function getScene() {
+  return this.scene;
+}
 
  
 // Models 
 
+const wait=ms=>new Promise(resolve => setTimeout(resolve, ms));
+
+async function loadModel() {
+  //return new Promise((resolve) => { 
+
 //Plain forest block
   var loader = new GLTFLoader();
-  for (let i = 0; i < 5; i++) {
-  loader.load( './Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb', function ( gltf ) {
+  //for (let i = 0; i < 5; i++) {
+  loader.loadAsync( './Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb', function ( gltf ) {
+    
 
   var forestBlock = gltf.scene;  
-  forestBlock.position.set(0,0,i*2);
-  console.log(forestBlock.position);
- objGroup.add(forestBlock);
+  //console.log(forestBlock);
+  // forestBlock.position.set(0,0,i*2);
+  //console.log(forestBlock.position);
+  //objGroup.add(forestBlock);
+ console.log(forestBlock);
+ 
+  return forestBlock; 
+  
 
 }, undefined, function ( error ) {
 
 	console.error( error );
 
 } );
-scene.add(objGroup);
-  } 
+//scene.add(objGroup);
+ // } 
+
+//});
+}
 
 
-  //Forest block with grass
+ /* //Forest block with grass
   var loader = new GLTFLoader();
   for (let i = 0; i < 5; i++) {
   loader.load( './Assets/AurynSky/Forest Pack/Models/ForestGrassBlender.gltf', function ( gltf ) {
@@ -303,7 +322,7 @@ scene.add(objGroup);
          scene.add(objGroup);
            } 
  
-          //Models end
+          //Models end */
 
   
   
@@ -311,7 +330,7 @@ scene.add(objGroup);
 
 
 
-var light = new THREE.HemisphereLight(0xffffff, 0x000000, 4); 
+var light = new THREE.HemisphereLight(0xffffff, 0x000000, 4);
 scene.add(light); 
 
 camera.position.set(13, 25, 30);
@@ -339,3 +358,5 @@ function animate () {
 }
 
 animate();
+
+export {getScene, loadModel};

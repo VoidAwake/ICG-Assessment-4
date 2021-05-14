@@ -1,5 +1,7 @@
 import * as THREE from '../node_modules/three/build/three.module.js';
 import {GridMesh} from "./GridMesh.js";
+import { loadModel } from './main.js';
+import {GLTFLoader} from "../node_modules/three/examples/jsm/loaders/GLTFLoader.js";
 
 class Grid {
     constructor (size, spacing, camera) {
@@ -123,12 +125,16 @@ class Grid {
     }
 
     addNewMesh (x, z) {
-        const newMesh = new GridMesh(1);
+
+        var newMesh = loadModel();
+        //scene.add(objGroup);
+        
+        
 
         let positionInGrid = new THREE.Vector3(x, 0, z).multiplyScalar(this.spacing);
         positionInGrid.add(this.origin);
 
-        newMesh.position.set(positionInGrid.x, positionInGrid.y, positionInGrid.z);
+        newMesh.position = (positionInGrid.x, positionInGrid.y, positionInGrid.z);
         this.objects[x][z] = newMesh;
 
         newMesh.visible = false;
