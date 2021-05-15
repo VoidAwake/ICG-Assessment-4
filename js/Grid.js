@@ -1,13 +1,13 @@
 import * as THREE from '../node_modules/three/build/three.module.js';
 import {GridMesh} from "./GridMesh.js";
-import { loadModel } from './main.js';
-import {GLTFLoader} from "../node_modules/three/examples/jsm/loaders/GLTFLoader.js";
 
 class Grid {
-    constructor (size, spacing, camera) {
+    constructor (size, spacing, camera, model) {
         this.size = size;
         this.spacing = spacing;
         this.camera = camera;
+        this.model = model;
+
         this.objects = new Array();
         this.group = new THREE.Group();
         this.origin = new THREE.Vector3(0, 0, 0);
@@ -125,16 +125,14 @@ class Grid {
     }
 
     addNewMesh (x, z) {
+        const newMesh = this.model.clone();
 
-        var newMesh = loadModel();
         //scene.add(objGroup);
-        console.log(newMesh);
         
-
         let positionInGrid = new THREE.Vector3(x, 0, z).multiplyScalar(this.spacing);
         positionInGrid.add(this.origin);
 
-        newMesh.position = (positionInGrid.x, positionInGrid.y, positionInGrid.z);
+        newMesh.position.set(positionInGrid.x, positionInGrid.y, positionInGrid.z);
         this.objects[x][z] = newMesh;
 
         newMesh.visible = false;
