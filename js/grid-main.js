@@ -2,6 +2,7 @@ import * as THREE from '../node_modules/three/build/three.module.js';
 import { Grid } from "./Grid.js";
 import { CameraController } from "./CameraController.js";
 import { GLTFLoader } from '../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
+import {PointerLockControls} from "./Dependencies/PointerLockControls.js";
 
 setup();
 
@@ -16,6 +17,19 @@ async function setup () {
       0.1,
       1000
   );
+<<<<<<< Updated upstream
+=======
+  const renderer = new THREE.WebGLRenderer();
+  var controls = new PointerLockControls(camera, renderer.domElement);
+  //	scene.add(playerMesh);
+  document.addEventListener(
+    'click',
+    function () {
+      controls.lock();
+    },
+    false
+  );
+>>>>>>> Stashed changes
 
   const loader = new GLTFLoader();
 
@@ -71,10 +85,23 @@ async function setup () {
   var light = new THREE.HemisphereLight(0xffffff, 0x000000, 4);
   scene.add(light); 
 
+<<<<<<< Updated upstream
   camera.position.set(13, 25, 30);
   camera.lookAt(13, 0, 15);
 
   const renderer = new THREE.WebGLRenderer();
+=======
+  //3rd person
+  //camera.position.set(13, 25, 30);
+  //camera.lookAt(13, 0, 15);
+
+
+  //first person
+  camera.position.set(13, 6, 14);
+  camera.lookAt(13, 0, -10);
+
+  
+>>>>>>> Stashed changes
 
   renderer.setSize(window.innerWidth, window.innerHeight);
 
