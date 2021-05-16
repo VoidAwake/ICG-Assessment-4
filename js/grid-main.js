@@ -46,14 +46,17 @@ async function setup () {
 
   const asyncLoadModel = async url => {
     const model = await loadModel(url);
-    const modelScene = model.scene;
+
     const newGroup = new THREE.Group();
-    for (const child of modelScene.children) {
+
+    for (const child of model.scene.children) {
       if (child.type == "Mesh") {
         child.material.transparent = true;
+
         newGroup.add(child.clone());
       }
     }
+
     return newGroup;
   }
 
@@ -79,7 +82,7 @@ async function setup () {
 
   const cameraController = new CameraController(camera, 100);
 
-  const grid = new Grid(7, 4, camera, models[7]);
+  const grid = new Grid(7, 4, camera, models);
   scene.add(grid.group);
 
   function animate () {

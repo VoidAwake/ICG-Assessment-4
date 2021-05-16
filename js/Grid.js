@@ -1,11 +1,11 @@
 import * as THREE from '../node_modules/three/build/three.module.js';
 
 class Grid {
-    constructor (size, spacing, camera, model) {
+    constructor (size, spacing, camera, models) {
         this.size = size;
         this.spacing = spacing;
         this.camera = camera;
-        this.model = model;
+        this.models = models;
 
         this.objects = new Array();
         this.group = new THREE.Group();
@@ -65,7 +65,8 @@ class Grid {
     }
 
     addNewMesh (x, z) {
-        const newMesh = this.model.clone();
+        const randomModelIndex = Math.floor(Math.random() * this.models.length)
+        const newMesh = this.models[randomModelIndex].clone();
 
         this.cloneMaterialsInGroup(newMesh);
 
