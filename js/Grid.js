@@ -67,7 +67,7 @@ class Grid {
     addNewMesh (x, z) {
         const newMesh = this.model.clone();
 
-        newMesh.material = this.model.material.clone();
+        this.cloneMaterialsInGroup(newMesh);
 
         let positionInGrid = new THREE.Vector3(x, 0, z).multiplyScalar(this.spacing);
         positionInGrid.add(this.origin);
@@ -123,7 +123,7 @@ class Grid {
             const distanceToObject = this.objects[x][z].position.distanceTo(gridCentre);
             const opacity = this.distanceToOpacity(distanceToObject);
 
-            this.objects[x][z].material.opacity = opacity;
+            this.setOpacityOfGroup(this.objects[x][z], opacity);
             this.objects[x][z].position.y = opacity * maxYPosition;
             }
         }
@@ -133,6 +133,26 @@ class Grid {
       const steepness = 10;
 
       return 1 / (1 + steepness * Math.pow(Math.E, distance - this.width * 0.5));
+    }
+
+    setOpacityOfGroup (group, opacity) {
+        group.children.forEach(child => {
+            this.setOpacityOfGroup(child, opacity);
+        });
+
+        if (group.material) {
+            group.material.opacity = opacity;
+        }
+    }
+
+    cloneMaterialsInGroup (group) {
+        group.children.forEach(child => {
+            this.cloneMaterialsInGroup(child);
+        });
+
+        if (group.material) {
+            group.material = group.material.clone();
+        }
     }
 }
 

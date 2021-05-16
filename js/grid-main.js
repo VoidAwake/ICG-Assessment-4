@@ -47,7 +47,14 @@ async function setup () {
   const asyncLoadModel = async url => {
     const model = await loadModel(url);
     const modelScene = model.scene;
-    return modelScene;
+    const newGroup = new THREE.Group();
+    for (const child of modelScene.children) {
+      if (child.type == "Mesh") {
+        child.material.transparent = true;
+        newGroup.add(child.clone());
+      }
+    }
+    return newGroup;
   }
 
   const getModels = async () => {
@@ -72,12 +79,7 @@ async function setup () {
 
   const cameraController = new CameraController(camera, 100);
 
-  const gridScene = await loadModel('./Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb');
-  const gridModel = gridScene.scene.children[2];
-
-  gridModel.material.transparent = true;
-
-  const grid = new Grid(7, 4, camera, gridModel);
+  const grid = new Grid(7, 4, camera, models[7]);
   scene.add(grid.group);
 
   function animate () {
