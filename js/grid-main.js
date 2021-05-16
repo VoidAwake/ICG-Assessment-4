@@ -85,12 +85,6 @@ async function setup () {
   var light = new THREE.HemisphereLight(0xffffff, 0x000000, 4);
   scene.add(light); 
 
-<<<<<<< Updated upstream
-  camera.position.set(13, 25, 30);
-  camera.lookAt(13, 0, 15);
-
-  const renderer = new THREE.WebGLRenderer();
-=======
   //3rd person
   //camera.position.set(13, 25, 30);
   //camera.lookAt(13, 0, 15);
@@ -101,7 +95,6 @@ async function setup () {
   camera.lookAt(13, 0, -10);
 
   
->>>>>>> Stashed changes
 
   renderer.setSize(window.innerWidth, window.innerHeight);
 
