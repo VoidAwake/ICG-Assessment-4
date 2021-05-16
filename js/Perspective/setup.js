@@ -1,10 +1,8 @@
 import { build } from './buildFloor.js';
-import { PointerLockControls } from '../Dependencies/PointerLockControls.js';
-import * as THREE from '../Dependencies/three.module.js';
-import { OrbitControls } from 'https://threejsfundamentals.org/threejs/resources/threejs/r127/examples/jsm/controls/OrbitControls.js';
-import { GUI } from 'https://threejsfundamentals.org/threejs/../3rdparty/dat.gui.module.js';
-//import {loadModel} from "../loadModels.js";
-import {FBXLoader} from "../Dependencies/FBXLoader.js";
+import { PointerLockControls } from "../../node_modules/three/examples/jsm/controls/PointerLockControls.js";
+import * as THREE from '../../node_modules/three/build/three.module.js';
+import { GUI } from "../../node_modules/dat.gui/build/dat.gui.module.js";
+import {FBXLoader} from "../../node_modules/three/examples/jsm/loaders/FBXLoader.js";
 
 
 var camera, scene, renderer, controls;
@@ -271,7 +269,7 @@ function animate() {
   {
 	  if (objects.children[i].position.y < 0){
 		  objects.children[i].position.y += 0.6 * clock.getDelta() * 9;
-		  console.log(objects.children[i].position.y);
+		  // console.log(objects.children[i].position.y);
 	  }
   } 
 

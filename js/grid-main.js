@@ -1,10 +1,7 @@
-import * as THREE from './three.module.js';
+import * as THREE from '../node_modules/three/build/three.module.js';
 import { Grid } from "./Grid.js";
 import { CameraController } from "./CameraController.js";
-//import { FBXLoader } from './jsm/loaders/FBXLoader.js';
-// import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { GLTFLoader } from '../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
-//import {loadModel} from "./loadModel.js"
 import { Toggles } from "./Toggles.js";
 
 const toggles = new Toggles();
