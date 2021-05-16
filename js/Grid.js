@@ -131,7 +131,7 @@ class Grid {
     }
 
     distanceToOpacity (distance) {
-      const steepness = 10;
+      const steepness = 15;
 
       return 1 / (1 + steepness * Math.pow(Math.E, distance - this.width * 0.5));
     }

@@ -82,7 +82,7 @@ async function setup () {
 
   const cameraController = new CameraController(camera, 100);
 
-  const grid = new Grid(7, 4, camera, models);
+  const grid = new Grid(14, 2, camera, models);
   scene.add(grid.group);
 
   function animate () {
