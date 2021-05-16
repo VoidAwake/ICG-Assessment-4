@@ -1,4 +1,4 @@
-import * as THREE from '../node_modules/three/build/three.module.js';
+import * as THREE from './three.module.js';
 import { Grid } from './Grid.js';
 import { CameraController } from './CameraController.js';
 
@@ -21,8 +21,8 @@ document.body.appendChild(renderer.domElement);
 
 const cameraController = new CameraController(camera, 100);
 
-const grid = new Grid(7, 4, camera);
-scene.add(grid.group);
+// const grid = new Grid(7, 4, camera);
+// scene.add(grid.group);
 
 var gui = new dat.GUI({ load: getPresetJSON(), preset: 'Preset1' });
 
@@ -134,7 +134,7 @@ function animate() {
 
   cameraController.update();
 
-  grid.update();
+  // grid.update();
 
   renderer.render(scene, camera);
 }
