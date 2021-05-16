@@ -17,8 +17,6 @@ async function setup () {
       0.1,
       1000
   );
-<<<<<<< Updated upstream
-=======
   const renderer = new THREE.WebGLRenderer();
   var controls = new PointerLockControls(camera, renderer.domElement);
   //	scene.add(playerMesh);
@@ -29,7 +27,6 @@ async function setup () {
     },
     false
   );
->>>>>>> Stashed changes
 
   const loader = new GLTFLoader();
 
