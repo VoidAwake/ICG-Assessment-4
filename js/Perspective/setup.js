@@ -113,7 +113,7 @@ function init() {
   window.addEventListener('resize', onWindowResize, false);
 
   {
-    const planeSize = 40;
+    const planeSize = 1000;
 
     const loader = new THREE.TextureLoader();
     const texture = loader.load(
@@ -134,18 +134,11 @@ function init() {
     mesh.rotation.x = Math.PI * -0.5;
     scene.add(mesh);
   }
+
   {
-    const cubeSize = 4;
-    const cubeGeo = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
-    const cubeMat = new THREE.MeshPhongMaterial({ color: '#8AC' });
-    const mesh = new THREE.Mesh(cubeGeo, cubeMat);
-    mesh.position.set(cubeSize + 1, cubeSize / 2, 0);
-    scene.add(mesh);
-  }
-  {
-    const sphereRadius = 3;
+    const sphereRadius = 100;
     const sphereWidthDivisions = 32;
-    const sphereHeightDivisions = 16;
+    const sphereHeightDivisions = 10;
     const sphereGeo = new THREE.SphereGeometry(
       sphereRadius,
       sphereWidthDivisions,
@@ -153,7 +146,9 @@ function init() {
     );
     const sphereMat = new THREE.MeshPhongMaterial({ color: '#CA8' });
     const mesh = new THREE.Mesh(sphereGeo, sphereMat);
-    mesh.position.set(-sphereRadius - 1, sphereRadius + 2, 0);
+    // mesh.position.set(-sphereRadius - 1, sphereRadius + 2, 0);
+    mesh.position.set(-100, 300, 0);
+
     scene.add(mesh);
   }
 
@@ -180,9 +175,9 @@ function init() {
 
   {
     const color = 0xffffff;
-    const intensity = 1;
+    const intensity = 2;
     const light = new THREE.PointLight(color, intensity);
-    light.position.set(0, 10, 0);
+    light.position.set(100, 100, -10);
     scene.add(light);
 
     const helper = new THREE.PointLightHelper(light);
