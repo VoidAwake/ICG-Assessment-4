@@ -153,7 +153,7 @@ async function setup () {
 
 
   //first person
-  camera.position.set(13, 6, 16);
+  camera.position.set(13, 6, 15);
   camera.lookAt(13, 0, -10);
 
 
