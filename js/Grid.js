@@ -67,6 +67,8 @@ class Grid {
     addNewMesh (x, z) {
         const newMesh = this.model.clone();
 
+        newMesh.material = this.model.material.clone();
+
         let positionInGrid = new THREE.Vector3(x, 0, z).multiplyScalar(this.spacing);
         positionInGrid.add(this.origin);
 
@@ -102,7 +104,7 @@ class Grid {
             this.move("forward");
         }
 
-        // this.fadeSides();
+        this.fadeSides();
     }
 
     getCameraOffset () {
@@ -112,25 +114,25 @@ class Grid {
     }
 
     fadeSides () {
-      const maxYPosition = -4;
+        const maxYPosition = 4;
 
-      for (let x = 0; x < this.size; x++) {
-        for (let z = 0; z < this.size; z++) {
-          const originToCentre = new THREE.Vector3(this.width * 0.5, 0, this.width * 0.5);
-          const gridCentre = this.camera.position.clone().sub(this.originalCameraOffset).add(originToCentre);
-          const distanceToObject = this.objects[x][z].position.distanceTo(gridCentre);
-          const opacity = this.distanceToOpacity(distanceToObject);
+        for (let x = 0; x < this.size; x++) {
+            for (let z = 0; z < this.size; z++) {
+            const originToCentre = new THREE.Vector3(this.width * 0.5, 0, this.width * 0.5);
+            const gridCentre = this.camera.position.clone().sub(this.originalCameraOffset).add(originToCentre);
+            const distanceToObject = this.objects[x][z].position.distanceTo(gridCentre);
+            const opacity = this.distanceToOpacity(distanceToObject);
 
-          this.objects[x][z].material.color = this.objects[x][z].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacity);
-          this.objects[x][z].position.y = opacity * maxYPosition;
+            this.objects[x][z].material.opacity = opacity;
+            this.objects[x][z].position.y = opacity * maxYPosition;
+            }
         }
-      }
     }
 
     distanceToOpacity (distance) {
       const steepness = 10;
 
-      return 1 - (1 / (1 + steepness * Math.pow(Math.E, distance - this.width * 0.5)));
+      return 1 / (1 + steepness * Math.pow(Math.E, distance - this.width * 0.5));
     }
 }
 

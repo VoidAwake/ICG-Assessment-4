@@ -362,9 +362,12 @@ async function setup () {
 
   const cameraController = new CameraController(camera, 100);
 
-  const gridModel = await loadModel();
+  const gridScene = await loadModel();
+  const gridModel = gridScene.scene.children[2];
 
-  const grid = new Grid(7, 4, camera, gridModel.scene);
+  gridModel.material.transparent = true;
+
+  const grid = new Grid(7, 4, camera, gridModel);
   scene.add(grid.group);
 
   function animate () {
