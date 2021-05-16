@@ -3,8 +3,9 @@ import { Grid } from "./Grid.js";
 import { CameraController } from "./CameraController.js";
 import { GLTFLoader } from '../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import { Toggles } from "./Toggles.js";
+import * as dat from "../node_modules/dat.gui/build/dat.gui.module.js";
 
-const toggles = new Toggles();
+
 
 const scene = new THREE.Scene();
 
@@ -20,13 +21,115 @@ async function setup () {
   const ratio = window.innerWidth / window.innerHeight;
 
   const camera = new THREE.PerspectiveCamera(
-      45,
+      100,
       ratio,
       0.1,
       1000
   );
 
+  var gui = new dat.GUI({ load: getPresetJSON(), preset: 'Preset1' });
+    var object1 = {
+      type1_boolean: false,
+      type2_string: 'string',
+      type3_number: 0,
+      x_position: 13,
+      y_position: 25,
+      z_position: 30,
+      SetCamera: function() {
+        camera.position.set(this.x_position,this.y_position,this.z_position);
 
+      },
+      ResetCamera: function () {
+        camera.position.set(13,25,30);
+      },
+    };
+
+    var object2 = {
+      grid_size: 7,
+      grid_spacing: 4,
+      ResetGrid: function () {
+        const grid = new Grid(this.grid_size, this.grid_spacing, camera, gridModel);
+        scene.add(grid.group);
+
+      },
+    };
+
+    console.log(object1.x_position)
+
+    // dat.GUI will modify colors in the format defined by their initial value.
+
+    // saveValues: gui.remember must be executed before gui.add
+    gui.remember(object1);
+    gui.remember(object2);
+
+    // setController: boolean, string, number, function
+
+
+    var folder1 = gui.addFolder('Camera Settings');
+    folder1.add(object1, 'x_position', -100,100,1);
+    folder1.add(object1, 'y_position', -100,100,1);
+    folder1.add(object1, 'z_position', -100,100,1);
+    folder1.add(object1, 'SetCamera');
+    folder1.add(object1, 'ResetCamera');
+
+    // collapse folder1
+
+    var folder2 = gui.addFolder('Grid Settings');
+    folder2.add(object2, 'grid_size', 1,30,1);
+    folder2.add(object2, 'grid_spacing', 7);
+    folder2.add(object2, 'ResetGrid');
+
+
+
+
+    // presetJSON: created from pressing the gear.
+    function getPresetJSON() {
+      return {
+        preset: 'Default',
+        closed: false,
+        remembered: {
+          Default: {
+            0: {
+              type1_boolean: false,
+              type2_string: 'string',
+              type3_number: 0,
+            },
+            1: {
+              string1: 'string1',
+              string2: 'string2',
+            },
+          },
+          Preset1: {
+            0: {
+              type1_boolean: true,
+              type2_string: 'string123',
+              type3_number: -2.2938689217758985,
+            },
+            1: {
+              string1: 'string_2',
+              string2: 'string_3',
+            },
+          },
+        },
+        folders: {
+          FolderNameA: {
+            preset: 'Default',
+            closed: false,
+            folders: {},
+          },
+          FolderNameB: {
+            preset: 'Default',
+            closed: false,
+            folders: {},
+          },
+          FolderNameC: {
+            preset: 'Default',
+            closed: false,
+            folders: {},
+          },
+        },
+      };
+    }
 
   
   // Models 
@@ -42,309 +145,7 @@ async function setup () {
       );
     });
 
-    //   //return new Promise((resolve) => { 
-
-    // //Plain forest block
-    // var loader = new GLTFLoader();
-    //   //for (let i = 0; i < 5; i++) {
-    //     return new Promise(resolve => {
-    //       new GLTFLoader().load('./Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb', function ( gltf ) {
-        
-    //   //loader.loadAsync( './Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb', function ( gltf ) {
-        
-
-    //   var forestBlock = gltf.scene;  
-    //   //console.log(forestBlock);
-    //   // forestBlock.position.set(0,0,i*2);
-    //   //console.log(forestBlock.position);
-    //   //objGroup.add(forestBlock);
-    // //  console.log(forestBlock);
-    
-    //   return Promise.resolve(); 
-      
-
-    // }, undefined, function ( error ) {
-
-    //   console.error( error );
-
-    // } );
-    // //scene.add(objGroup);
-    // // } 
-
-    // });
   }
-
-
-  /* //Forest block with grass
-    var loader = new GLTFLoader();
-    for (let i = 0; i < 5; i++) {
-    loader.load( './Assets/AurynSky/Forest Pack/Models/ForestGrassBlender.gltf', function ( gltf ) {
-
-    var forestGrass= gltf.scene;  
-    forestGrass.position.set(3,0,i*2);
-  objGroup.add(forestGrass);
-
-  }, undefined, function ( error ) {
-
-    console.error( error );
-
-  } );
-  scene.add(objGroup);
-    } 
-
-    //Forest block with pinetree
-    var loader = new GLTFLoader();
-    for (let i = 0; i < 5; i++) {
-    loader.load( './Assets/AurynSky/Forest Pack/Models/ForestPineTreeBlender.gltf', function ( gltf ) {
-
-    var forestPineTree= gltf.scene;  
-    forestPineTree.position.set(6,0,i*2);
-  objGroup.add(forestPineTree);
-
-  }, undefined, function ( error ) {
-
-    console.error( error );
-
-  } );
-  scene.add(objGroup);
-    } 
-
-    //Forest block with small tree
-    var loader = new GLTFLoader();
-    for (let i = 0; i < 5; i++) {
-    loader.load( './Assets/AurynSky/Forest Pack/Models/ForestTreeSmallBlender.glb', function ( gltf ) {
-
-    var forestSmallTree= gltf.scene;  
-    forestSmallTree.position.set(9,0,i*2);
-  objGroup.add(forestSmallTree);
-
-  }, undefined, function ( error ) {
-
-    console.error( error );
-
-  } );
-  scene.add(objGroup);
-    } 
-
-
-    //Forest crate
-    var loader = new GLTFLoader();
-    for (let i = 0; i < 5; i++) {
-    loader.load( './Assets/AurynSky/Forest Pack/Models/ForestCrateBlender.glb', function ( gltf ) {
-
-    var forestCrate= gltf.scene;  
-    forestCrate.position.set(12,0,i*2);
-  objGroup.add(forestCrate);
-
-  }, undefined, function ( error ) {
-
-    console.error( error );
-
-  } );
-  scene.add(objGroup);
-    } 
-
-      //Snow Block
-      var loader = new GLTFLoader();
-      for (let i = 0; i < 5; i++) {
-      loader.load( './Assets/AurynSky/WinterArena/Models/SnowRockGroundBlender.glb', function ( gltf ) {
-    
-      var snowBlock= gltf.scene;  
-      snowBlock.position.set(15,0,i*2);
-    objGroup.add(snowBlock);
-    
-    }, undefined, function ( error ) {
-    
-      console.error( error );
-    
-    } );
-    scene.add(objGroup);
-      } 
-
-
-      //Snow pinetree
-      var loader = new GLTFLoader();
-      for (let i = 0; i < 5; i++) {
-      loader.load( './Assets/AurynSky/WinterArena/Models/SnowPineTreeBlender.glb', function ( gltf ) {
-    
-      var snowPineTree= gltf.scene;  
-      snowPineTree.position.set(18,0,i*2);
-    objGroup.add(snowPineTree);
-    
-    }, undefined, function ( error ) {
-    
-      console.error( error );
-    
-    } );
-    scene.add(objGroup);
-      } 
-
-
-      //Snow apple tree
-      var loader = new GLTFLoader();
-      for (let i = 0; i < 5; i++) {
-      loader.load( './Assets/AurynSky/WinterArena/Models/SnowAppleTreeBlender.glb', function ( gltf ) {
-    
-      var snowAppleTree= gltf.scene;  
-      snowAppleTree.position.set(21,0,i*2);
-    objGroup.add(snowAppleTree);
-    
-    }, undefined, function ( error ) {
-    
-      console.error( error );
-    
-    } );
-    scene.add(objGroup);
-      } 
-
-
-        //Snow torch
-        var loader = new GLTFLoader();
-        for (let i = 0; i < 5; i++) {
-        loader.load( './Assets/AurynSky/WinterArena/Models/SnowTorchBlender.glb', function ( gltf ) {
-      
-        var snowTorch= gltf.scene;  
-        snowTorch.position.set(24,0,i*2);
-      objGroup.add(snowTorch);
-      
-      }, undefined, function ( error ) {
-      
-        console.error( error );
-      
-      } );
-      scene.add(objGroup);
-        } 
-
-        //Snow flag
-        var loader = new GLTFLoader();
-        for (let i = 0; i < 5; i++) {
-        loader.load( './Assets/AurynSky/WinterArena/Models/SnowFlagBlender.glb', function ( gltf ) {
-      
-        var snowFlag= gltf.scene;  
-        snowFlag.position.set(27,0,i*2);
-      objGroup.add(snowFlag);
-      
-      }, undefined, function ( error ) {
-      
-        console.error( error );
-      
-      } );
-      scene.add(objGroup);
-        } 
-
-
-      
-          //Ice block
-          var loader = new GLTFLoader();
-          for (let i = 0; i < 5; i++) {
-          loader.load( './Assets/AurynSky/WinterArena/Models/IceBlockBlender.glb', function ( gltf ) {
-        
-          var iceBlock= gltf.scene;  
-          iceBlock.position.set(30,0,i*2);
-        objGroup.add(iceBlock);
-        
-        }, undefined, function ( error ) {
-        
-          console.error( error );
-        
-        } );
-        scene.add(objGroup);
-          } 
-
-          
-          //Ice pinetree
-          var loader = new GLTFLoader();
-          for (let i = 0; i < 5; i++) {
-          loader.load( './Assets/AurynSky/WinterArena/Models/IcePineTreeBlender.glb', function ( gltf ) {
-        
-          var icePineTree= gltf.scene;  
-          icePineTree.position.set(33,0,i*2);
-        objGroup.add(icePineTree);
-        
-        }, undefined, function ( error ) {
-        
-          console.error( error );
-        
-        } );
-        scene.add(objGroup);
-          } 
-
-
-          //Ice small tree
-          var loader = new GLTFLoader();
-          for (let i = 0; i < 5; i++) {
-          loader.load( './Assets/AurynSky/WinterArena/Models/IceSmallTreeBlender.glb', function ( gltf ) {
-        
-          var iceSmallTree= gltf.scene;  
-          iceSmallTree.position.set(36,0,i*2);
-          objGroup.add(iceSmallTree);
-        
-        }, undefined, function ( error ) {
-        
-          console.error( error );
-        
-        } );
-        scene.add(objGroup);
-          } 
-
-
-            //Ice grass on block
-            var loader = new GLTFLoader();
-            for (let i = 0; i < 5; i++) {
-            loader.load( './Assets/AurynSky/WinterArena/Models/IceGrassBlender.glb', function ( gltf ) {
-          
-            var iceGrass= gltf.scene;  
-            iceGrass.position.set(39,0,i*2);
-          objGroup.add(iceGrass);
-          
-          }, undefined, function ( error ) {
-          
-            console.error( error );
-          
-          } );
-          scene.add(objGroup);
-            } 
-
-            //Dungeon Block
-            var loader = new GLTFLoader();
-            for (let i = 0; i < 5; i++) {
-            loader.load( './Assets/AurynSky/Dungeon Pack/Models/DungeonBlockBlender.glb', function ( gltf ) {
-          
-            var DungeonBlock= gltf.scene;  
-            DungeonBlock.position.set(42,0,i*2);
-          objGroup.add(DungeonBlock);
-          
-          }, undefined, function ( error ) {
-          
-            console.error( error );
-          
-          } );
-          scene.add(objGroup);
-            } 
-
-
-            //Dungeon Banner 
-            var loader = new GLTFLoader();
-            for (let i = 0; i < 5; i++) {
-            loader.load( './Assets/AurynSky/Dungeon Pack/Models/DungeonBannerBlender.glb', function ( gltf ) {
-          
-            var DungeonBanner= gltf.scene;  
-            DungeonBanner.position.set(45,0,i*2);
-            objGroup.add(DungeonBanner);
-          
-          }, undefined, function ( error ) {
-          
-            console.error( error );
-          
-          } );
-          scene.add(objGroup);
-            } 
-  
-            //Models end */
-
-    
-    
-
 
 
 
@@ -352,7 +153,7 @@ async function setup () {
   scene.add(light); 
 
   camera.position.set(13, 25, 30);
-  camera.lookAt(13, 0, 15);
+  camera.lookAt(13, 1, 15);
 
   const renderer = new THREE.WebGLRenderer();
 
@@ -367,7 +168,7 @@ async function setup () {
 
   gridModel.material.transparent = true;
 
-  const grid = new Grid(7, 4, camera, gridModel);
+  const grid = new Grid(10, 4, camera, gridModel);
   scene.add(grid.group);
 
   function animate () {
@@ -380,8 +181,7 @@ async function setup () {
       renderer.render(scene, camera);
   }
 
-  animate();
-
+animate()
 }
 
 export {getScene};
