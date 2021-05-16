@@ -2,10 +2,14 @@ import * as THREE from '../node_modules/three/build/three.module.js';
 import { Grid } from "./Grid.js";
 import { CameraController } from "./CameraController.js";
 import { GLTFLoader } from '../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
+import {PointerLockControls} from "./Dependencies/PointerLockControls.js";
 
+var currentBiome = 0;
+const renderer = new THREE.WebGLRenderer();
 var clock = new THREE.Clock();
 clock.start();
 setup();
+
 
 
 async function setup () {
@@ -14,6 +18,7 @@ async function setup () {
   
 
   const ratio = window.innerWidth / window.innerHeight;
+  
 
   const camera = new THREE.PerspectiveCamera(
       45,
@@ -21,7 +26,18 @@ async function setup () {
       0.1,
       1000
   );
-  camera.position.set(0, 10, 0);
+
+  var controls = new PointerLockControls(camera, renderer.domElement);
+  //	scene.add(playerMesh);
+  document.addEventListener(
+    'click',
+    function () {
+      controls.lock();
+    },
+    false
+  );
+  
+  
 
   const loader = new GLTFLoader();
 
@@ -31,19 +47,12 @@ async function setup () {
     });
   }
 
-  const modelUrlsForest = [
+  const modelsUrls = [
     './Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb',
     './Assets/AurynSky/Forest Pack/Models/ForestGrassBlender.gltf',
     './Assets/AurynSky/Forest Pack/Models/ForestPineTreeBlender.gltf',
     './Assets/AurynSky/Forest Pack/Models/ForestTreeSmallBlender.glb',
     './Assets/AurynSky/Forest Pack/Models/ForestCrateBlender.glb',
-
-   // './Assets/AurynSky/Dungeon Pack/Models/DungeonBlockBlender.glb',
-    //'./Assets/AurynSky/Dungeon Pack/Models/DungeonBannerBlender.glb'
-  ];
-
-  const modelUrlsSnow = [
-
     './Assets/AurynSky/WinterArena/Models/SnowRockGroundBlender.glb',
     './Assets/AurynSky/WinterArena/Models/SnowPineTreeBlender.glb',
     './Assets/AurynSky/WinterArena/Models/SnowAppleTreeBlender.glb',
@@ -52,8 +61,36 @@ async function setup () {
     './Assets/AurynSky/WinterArena/Models/IceBlockBlender.glb',
     './Assets/AurynSky/WinterArena/Models/IcePineTreeBlender.glb',
     './Assets/AurynSky/WinterArena/Models/IceSmallTreeBlender.glb',
-    './Assets/AurynSky/WinterArena/Models/IceGrassBlender.glb',
+    './Assets/AurynSky/WinterArena/Models/IceGrassBlender.glb'
 
+
+  ]
+
+  var modelsLoaded = [];
+
+  const modelUrlsForest = [
+    './Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb',
+    './Assets/AurynSky/Forest Pack/Models/ForestGrassBlender.gltf',
+    './Assets/AurynSky/Forest Pack/Models/ForestPineTreeBlender.gltf',
+    './Assets/AurynSky/Forest Pack/Models/ForestTreeSmallBlender.glb',
+    './Assets/AurynSky/Forest Pack/Models/ForestCrateBlender.glb',
+    
+
+   // './Assets/AurynSky/Dungeon Pack/Models/DungeonBlockBlender.glb',
+    //'./Assets/AurynSky/Dungeon Pack/Models/DungeonBannerBlender.glb'
+  ];
+
+  const modelUrlsSnow = [
+    './Assets/AurynSky/WinterArena/Models/SnowRockGroundBlender.glb',
+    './Assets/AurynSky/WinterArena/Models/SnowPineTreeBlender.glb',
+    './Assets/AurynSky/WinterArena/Models/SnowAppleTreeBlender.glb',
+    './Assets/AurynSky/WinterArena/Models/SnowTorchBlender.glb',
+    './Assets/AurynSky/WinterArena/Models/SnowFlagBlender.glb',
+    './Assets/AurynSky/WinterArena/Models/IceBlockBlender.glb',
+    './Assets/AurynSky/WinterArena/Models/IcePineTreeBlender.glb',
+    './Assets/AurynSky/WinterArena/Models/IceSmallTreeBlender.glb',
+    './Assets/AurynSky/WinterArena/Models/IceGrassBlender.glb'
+    
   ];
 
   const asyncLoadModel = async url => {
@@ -72,18 +109,12 @@ async function setup () {
     return newGroup;
   }
 
-  const getModels = async () => {
-    console.log("test");
-    if (clock.getElapsedTime() > 10) {
+  
 
-      clock.stop();
-      clock.start();
+  const getModels = async () => {
+    
       return Promise.all(modelUrlsForest.map(url => asyncLoadModel(url)));
     
-    }
-    else {
-      return Promise.all(modelUrlsSnow.map(url => asyncLoadModel(url)));
-    }
   }
 
   const updateModels = async (grid) => {
@@ -92,14 +123,22 @@ async function setup () {
 
       clock.stop();
       clock.start();
-      
-      grid.models =  Promise.all(modelUrlsForest.map(url => asyncLoadModel(url)));
+      switch(currentBiome) {
+        case 0:
+          grid.models = await Promise.all(modelUrlsForest.map(url => asyncLoadModel(url)));
+          break;
+        case 1:
+          grid.models = await Promise.all(modelUrlsSnow.map(url => asyncLoadModel(url)));
+          break;
+      }
+      currentBiome++;
+      if (currentBiome > 1) {
+        currentBiome = 0;
+      }
+    }
     
-    }
-    else {
-      grid.models = Promise.all(modelUrlsSnow.map(url => asyncLoadModel(url)));
-    }
   }
+
 
   const models = await getModels();
 
@@ -114,10 +153,10 @@ async function setup () {
 
 
   //first person
-  camera.position.set(13, 6, 20);
+  camera.position.set(13, 6, 16);
   camera.lookAt(13, 0, -10);
 
-  const renderer = new THREE.WebGLRenderer();
+
 
   renderer.setSize(window.innerWidth, window.innerHeight);
 
