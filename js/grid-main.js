@@ -6,7 +6,6 @@ import {PointerLockControls} from "./Dependencies/PointerLockControls.js";
 import * as dat from "../node_modules/dat.gui/build/dat.gui.module.js";
 
 var currentBiome = 0;
-const renderer = new THREE.WebGLRenderer();
 var clock = new THREE.Clock();
 clock.start();
 setup();
@@ -16,18 +15,16 @@ setup();
 async function setup () {
   const scene = new THREE.Scene();
   
-  
+  const renderer = new THREE.WebGLRenderer();
 
   const ratio = window.innerWidth / window.innerHeight;
   
-
   const camera = new THREE.PerspectiveCamera(
       55,
       ratio,
       0.1,
       1000
   );
-
 
   var gui = new dat.GUI({ load: getPresetJSON(), preset: 'Preset1' });
     var object1 = {
@@ -259,8 +256,6 @@ async function setup () {
   // first person
   camera.position.set(13,6,14);
   camera.lookAt(13,0,-10)
-
-  const renderer = new THREE.WebGLRenderer();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
 
