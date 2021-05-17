@@ -1,4 +1,6 @@
 import * as THREE from '../node_modules/three/build/three.module.js';
+import { Model } from "../node_modules/@voidawake/3d-wfc-js/Model.js";
+import { Knots } from "./Knots.js";
 
 class Grid {
     constructor (size, spacing, camera, models) {
@@ -65,8 +67,29 @@ class Grid {
     }
 
     addNewMesh (x, z) {
-        const randomModelIndex = Math.floor(Math.random() * this.models.length)
-        const newMesh = this.models[randomModelIndex].clone();
+        let newMesh;
+
+        if (this.structuresNearby(x, z)) {
+            // Generate Basic Tile
+            newMesh = this.models[0].clone();
+
+            newMesh.structure = false;
+        } else {
+            if (Math.random() > 0.01) {
+                // Generate Random Tile
+                const randomModelIndex = Math.floor(Math.random() * this.models.length);
+                newMesh = this.models[randomModelIndex].clone();
+
+                newMesh.structure = false;
+            } else {
+                // Generate Structure
+                newMesh = new THREE.Group();
+                newMesh.add(this.models[0].clone());
+                newMesh.add(this.createWFCStructure());
+
+                newMesh.structure = true;
+            }
+        }
 
         this.cloneMaterialsInGroup(newMesh);
 
@@ -81,6 +104,10 @@ class Grid {
         this.group.add(newMesh);
 
         setTimeout(function(){ newMesh.visible = true; }, 100);
+
+        if (newMesh.structure) {
+            this.convertNearbyTiles(x, z);
+        }
     }
 
     update () {
@@ -152,8 +179,57 @@ class Grid {
         });
 
         if (group.material) {
+            group.material.transparent = true;
             group.material = group.material.clone();
         }
+    }
+
+    createWFCStructure () {
+        const model = new Model(null, 5, 5, 5, false, Knots);
+
+        for (let k = 0; k < 10; k++) {
+            const finished = model.Run(1);
+
+            if (finished) {
+                const mesh = model.MeshOutput();
+                mesh.scale.divideScalar(3);
+                mesh.translateY(8);
+                mesh.translateX(-2);
+                mesh.translateZ(2);
+                return mesh;
+            }
+        }
+
+        return new THREE.Group();
+    }
+
+    structuresNearby (x, z) {
+        if (x > 0             && z > 0             && this.objects[x - 1] && this.objects[x - 1][z - 1] && this.objects[x - 1][z - 1].structure) return true;
+        if (x > 0                                  && this.objects[x - 1] && this.objects[x - 1][  z  ] && this.objects[x - 1][  z  ].structure) return true;
+        if (x > 0             && z < this.size - 1 && this.objects[x - 1] && this.objects[x - 1][z + 1] && this.objects[x - 1][z + 1].structure) return true;
+        if (                     z > 0             && this.objects[  x  ] && this.objects[  x  ][z - 1] && this.objects[  x  ][z - 1].structure) return true;
+        if (                     z < this.size - 1 && this.objects[  x  ] && this.objects[  x  ][z + 1] && this.objects[  x  ][z + 1].structure) return true;
+        if (x < this.size - 1 && z > 0             && this.objects[x + 1] && this.objects[x + 1][z - 1] && this.objects[x + 1][z - 1].structure) return true;
+        if (x < this.size - 1                      && this.objects[x + 1] && this.objects[x + 1][  z  ] && this.objects[x + 1][  z  ].structure) return true;
+        if (x < this.size - 1 && z < this.size - 1 && this.objects[x + 1] && this.objects[x + 1][z + 1] && this.objects[x + 1][z + 1].structure) return true;
+
+        return false;
+    }
+
+    convertNearbyTiles (x, z) {
+        if (x > 0             && z > 0             && this.objects[x - 1] && this.objects[x - 1][z - 1]) this.convert(x - 1, z - 1);
+        if (x > 0                                  && this.objects[x - 1] && this.objects[x - 1][  z  ]) this.convert(x - 1,   z  );
+        if (x > 0             && z < this.size - 1 && this.objects[x - 1] && this.objects[x - 1][z + 1]) this.convert(x - 1, z + 1);
+        if (                     z > 0             && this.objects[  x  ] && this.objects[  x  ][z - 1]) this.convert(  x  , z - 1);
+        if (                     z < this.size - 1 && this.objects[  x  ] && this.objects[  x  ][z + 1]) this.convert(  x  , z + 1);
+        if (x < this.size - 1 && z > 0             && this.objects[x + 1] && this.objects[x + 1][z - 1]) this.convert(x + 1, z - 1);
+        if (x < this.size - 1                      && this.objects[x + 1] && this.objects[x + 1][  z  ]) this.convert(x + 1,   z  );
+        if (x < this.size - 1 && z < this.size - 1 && this.objects[x + 1] && this.objects[x + 1][z + 1]) this.convert(x + 1, z + 1);
+    }
+
+    convert (x, z) {
+        this.group.remove(this.objects[x][z]);
+        this.addNewMesh(x, z);
     }
 }
 
