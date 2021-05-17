@@ -1,11 +1,12 @@
 import * as THREE from '../node_modules/three/build/three.module.js';
-import {GridMesh} from "./GridMesh.js";
 
 class Grid {
-    constructor (size, spacing, camera) {
+    constructor (size, spacing, camera, models) {
         this.size = size;
         this.spacing = spacing;
         this.camera = camera;
+        this.models = models;
+
         this.objects = new Array();
         this.group = new THREE.Group();
         this.origin = new THREE.Vector3(0, 0, 0);
@@ -64,7 +65,10 @@ class Grid {
     }
 
     addNewMesh (x, z) {
-        const newMesh = new GridMesh(1);
+        const randomModelIndex = Math.floor(Math.random() * this.models.length)
+        const newMesh = this.models[randomModelIndex].clone();
+
+        this.cloneMaterialsInGroup(newMesh);
 
         let positionInGrid = new THREE.Vector3(x, 0, z).multiplyScalar(this.spacing);
         positionInGrid.add(this.origin);
@@ -111,25 +115,45 @@ class Grid {
     }
 
     fadeSides () {
-      const maxYPosition = -4;
+        const maxYPosition = 4;
 
-      for (let x = 0; x < this.size; x++) {
-        for (let z = 0; z < this.size; z++) {
-          const originToCentre = new THREE.Vector3(this.width * 0.5, 0, this.width * 0.5);
-          const gridCentre = this.camera.position.clone().sub(this.originalCameraOffset).add(originToCentre);
-          const distanceToObject = this.objects[x][z].position.distanceTo(gridCentre);
-          const opacity = this.distanceToOpacity(distanceToObject);
+        for (let x = 0; x < this.size; x++) {
+            for (let z = 0; z < this.size; z++) {
+            const originToCentre = new THREE.Vector3(this.width * 0.5, 0, this.width * 0.5);
+            const gridCentre = this.camera.position.clone().sub(this.originalCameraOffset).add(originToCentre);
+            const distanceToObject = this.objects[x][z].position.distanceTo(gridCentre);
+            const opacity = this.distanceToOpacity(distanceToObject);
 
-          this.objects[x][z].material.color = this.objects[x][z].baseColor.clone().lerpHSL(new THREE.Color(0x000000), opacity);
-          this.objects[x][z].position.y = opacity * maxYPosition;
+            this.setOpacityOfGroup(this.objects[x][z], opacity);
+            this.objects[x][z].position.y = opacity * maxYPosition;
+            }
         }
-      }
     }
 
     distanceToOpacity (distance) {
-      const steepness = 10;
+      const steepness = 15;
 
-      return 1 - (1 / (1 + steepness * Math.pow(Math.E, distance - this.width * 0.5)));
+      return 1 / (1 + steepness * Math.pow(Math.E, distance - this.width * 0.5));
+    }
+
+    setOpacityOfGroup (group, opacity) {
+        group.children.forEach(child => {
+            this.setOpacityOfGroup(child, opacity);
+        });
+
+        if (group.material) {
+            group.material.opacity = opacity;
+        }
+    }
+
+    cloneMaterialsInGroup (group) {
+        group.children.forEach(child => {
+            this.cloneMaterialsInGroup(child);
+        });
+
+        if (group.material) {
+            group.material = group.material.clone();
+        }
     }
 }
 
