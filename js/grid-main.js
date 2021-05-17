@@ -36,11 +36,6 @@ async function setup () {
     },
     false
   );
-<<<<<<<
-  
-=======
-
->>>>>>>
   const loader = new GLTFLoader();
 
   function loadModel (url) {
