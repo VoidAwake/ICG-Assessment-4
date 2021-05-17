@@ -13,7 +13,7 @@ async function setup () {
   const ratio = window.innerWidth / window.innerHeight;
 
   const camera = new THREE.PerspectiveCamera(
-      120,
+      55,
       ratio,
       0.1,
       1000
@@ -28,16 +28,20 @@ async function setup () {
       x_position: 13,
       y_position: 6,
       z_position: 14,
-      fov: 45,
-      SetCamera: function() {
-        camera.position.set(this.x_position,this.y_position,this.z_position);
+      fov: 55,
+      Set_First_Person: function() {
+        // camera.position.set(this.x_position,this.y_position,this.z_position);
         camera.fov = this.fov;
         camera.updateProjectionMatrix();
+          // first person
+        camera.position.set(13,6,14);
+        camera.lookAt(13,0,-10)
       },
-      ResetCamera: function () {
+      Set_Third_Person: function () {
 
-        camera.position.set(13, 25, 30);
-        camera.lookAt(13,25,15);
+        camera.position.set(13, 16, 15);
+        camera.lookAt(13,-220,15);
+        console.log(camera.position)
         // camera.fov = 120;
         // camera.updateProjectionMatrix();
 
@@ -77,9 +81,9 @@ async function setup () {
     folder1.add(object1, 'x_position', -100,100,1);
     folder1.add(object1, 'y_position', 6,50,1);
     folder1.add(object1, 'z_position', -100,100,1);
-    folder1.add(object1, 'fov', 45, 100, 1);
-    folder1.add(object1, 'SetCamera');
-    folder1.add(object1, 'ResetCamera');
+    folder1.add(object1, 'fov', 55, 120, 1);
+    folder1.add(object1, 'Set_First_Person');
+    folder1.add(object1, 'Set_Third_Person');
 
     // collapse folder1
 
