@@ -37,8 +37,6 @@ async function setup () {
     false
   );
   
-  
-
   const loader = new GLTFLoader();
 
   function loadModel (url) {
@@ -47,7 +45,7 @@ async function setup () {
     });
   }
 
-  const modelsUrls = [
+  const modelUrls = [
     './Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb',
     './Assets/AurynSky/Forest Pack/Models/ForestGrassBlender.gltf',
     './Assets/AurynSky/Forest Pack/Models/ForestPineTreeBlender.gltf',
@@ -61,36 +59,9 @@ async function setup () {
     './Assets/AurynSky/WinterArena/Models/IceBlockBlender.glb',
     './Assets/AurynSky/WinterArena/Models/IcePineTreeBlender.glb',
     './Assets/AurynSky/WinterArena/Models/IceSmallTreeBlender.glb',
-    './Assets/AurynSky/WinterArena/Models/IceGrassBlender.glb'
-
-
-  ]
-
-  var modelsLoaded = [];
-
-  const modelUrlsForest = [
-    './Assets/AurynSky/Forest Pack/Models/Forestground01blender.glb',
-    './Assets/AurynSky/Forest Pack/Models/ForestGrassBlender.gltf',
-    './Assets/AurynSky/Forest Pack/Models/ForestPineTreeBlender.gltf',
-    './Assets/AurynSky/Forest Pack/Models/ForestTreeSmallBlender.glb',
-    './Assets/AurynSky/Forest Pack/Models/ForestCrateBlender.glb',
-    
-
-   // './Assets/AurynSky/Dungeon Pack/Models/DungeonBlockBlender.glb',
-    //'./Assets/AurynSky/Dungeon Pack/Models/DungeonBannerBlender.glb'
-  ];
-
-  const modelUrlsSnow = [
-    './Assets/AurynSky/WinterArena/Models/SnowRockGroundBlender.glb',
-    './Assets/AurynSky/WinterArena/Models/SnowPineTreeBlender.glb',
-    './Assets/AurynSky/WinterArena/Models/SnowAppleTreeBlender.glb',
-    './Assets/AurynSky/WinterArena/Models/SnowTorchBlender.glb',
-    './Assets/AurynSky/WinterArena/Models/SnowFlagBlender.glb',
-    './Assets/AurynSky/WinterArena/Models/IceBlockBlender.glb',
-    './Assets/AurynSky/WinterArena/Models/IcePineTreeBlender.glb',
-    './Assets/AurynSky/WinterArena/Models/IceSmallTreeBlender.glb',
-    './Assets/AurynSky/WinterArena/Models/IceGrassBlender.glb'
-    
+    './Assets/AurynSky/WinterArena/Models/IceGrassBlender.glb',
+    './Assets/AurynSky/Dungeon Pack/Models/DungeonBlockBlender.glb',
+    './Assets/AurynSky/Dungeon Pack/Models/DungeonBannerBlender.glb',
   ];
 
   const asyncLoadModel = async url => {
@@ -109,54 +80,60 @@ async function setup () {
     return newGroup;
   }
 
-  
-
   const getModels = async () => {
-    
-      return Promise.all(modelUrlsForest.map(url => asyncLoadModel(url)));
-    
+      return Promise.all(modelUrls.map(url => asyncLoadModel(url)));
   }
 
-  const updateModels = async (grid) => {
-    console.log("test");
-    if (clock.getElapsedTime() > 10) {
+  const updateModels = grid => {
+    if (clock.getElapsedTime() > 5) {
+      console.log("Change Biome");
 
       clock.stop();
       clock.start();
-      switch(currentBiome) {
-        case 0:
-          grid.models = await Promise.all(modelUrlsForest.map(url => asyncLoadModel(url)));
-          break;
-        case 1:
-          grid.models = await Promise.all(modelUrlsSnow.map(url => asyncLoadModel(url)));
-          break;
-      }
+
       currentBiome++;
-      if (currentBiome > 1) {
+      if (currentBiome == biomes.length) {
         currentBiome = 0;
       }
-    }
-    
-  }
 
+      grid.models = biomes[currentBiome];
+    }
+  }
 
   const models = await getModels();
 
-  console.log(models);
+  const biomes = [
+    [
+      models[0],
+      models[1],
+      models[2],
+      models[3],
+      models[4],
+    ],
+    [
+      models[5],
+      models[6],
+      models[7],
+      models[8],
+      models[9],
+      models[10],
+      models[11],
+      models[12],
+      models[13],
+    ],
+  ];
 
   var light = new THREE.HemisphereLight(0xffffff, 0x000000, 4);
   scene.add(light); 
 
   //3rd person
-  //camera.position.set(13, 25, 30);
-  //camera.lookAt(13, 0, 15);
+  camera.position.set(13, 25, 30);
+  camera.lookAt(13, 0, 15);
 
 
   //first person
-  camera.position.set(13, 6, 15);
-  camera.lookAt(13, 0, -10);
-
-
+  // camera.position.set(13, 6, 15);
+  // camera.lookAt(13, 0, -10);
 
   renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -164,15 +141,13 @@ async function setup () {
 
   const cameraController = new CameraController(camera, 100);
 
-  const grid = new Grid(14, 2, camera, models);
+  const grid = new Grid(14, 2, camera, biomes[currentBiome]);
   scene.add(grid.group);
 
   function animate () {
       requestAnimationFrame(animate);
-     //console.log(clock.getElapsedTime());
-      if (clock.getElapsedTime() > 10) {
-       updateModels(grid);
-      }
+
+      updateModels(grid);
 
       cameraController.update();
 
