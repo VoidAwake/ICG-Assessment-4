@@ -3,18 +3,18 @@ import { Grid } from "./Grid.js";
 import { CameraController } from "./CameraController.js";
 import { Model } from "../node_modules/@voidawake/3d-wfc-js/Model.js";
 import { Knots } from "../node_modules/@voidawake/3d-wfc-js/data/Knots.js";
-import { WFCModel } from "../WFCModel.js";
+// import { WFCModel } from "../WFCModel.js";
 
 // Before anything else we need to load all the models
 
-async function main() {
-    const gltfData = await modelLoader(URL),
+// async function main() {
+//     const gltfData = await modelLoader(URL),
  
-    model = gltf.scene;
-    scene.add(model);
+//     model = gltf.scene;
+//     scene.add(model);
  
-    dosomething(model);
- }
+//     dosomething(model);
+//  }
 
 const scene = new THREE.Scene();
 const ratio = window.innerWidth / window.innerHeight;
@@ -37,23 +37,23 @@ document.body.appendChild(renderer.domElement);
 
 const cameraController = new CameraController(camera, 100);
 
-const grid = new Grid(30, 1, camera);
-scene.add(grid.group);
+// const grid = new Grid(30, 1, camera);
+// scene.add(grid.group);
 
 function animate () {
     requestAnimationFrame(animate);
 
     cameraController.update();
 
-    grid.update();
+    // grid.update();
 
     renderer.render(scene, camera);
 }
 
 
 
-const model = new Model(null, 5, 5, 5, true, WFCModel);
-// const model = new Model("only turns", 3, 3, 3, true, Knots);
+// const model = new Model(null, 5, 5, 5, true, WFCModel);
+const model = new Model(null, 5, 5, 5, false, Knots);
 
 for (let k = 0; k < 10; k++)
 {
