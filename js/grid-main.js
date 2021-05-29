@@ -127,8 +127,8 @@ async function setup () {
     camera,
     grid,
     100,
-    new THREE.Vector3(0, 10, 0),
-    new THREE.Vector3(0, 25, 30)
+    new THREE.Vector3(0, 6, 0),
+    new THREE.Vector3(0, 20, 20)
   );
 
   const gridToggles = new GridToggles(camera, cameraController);
