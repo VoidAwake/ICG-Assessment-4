@@ -73,21 +73,21 @@ class Grid {
             // Generate Basic Tile
             newMesh = this.models[0].clone();
 
-            newMesh.structure = false;
+            newMesh.isStructure = false;
         } else {
             if (Math.random() > 0.01) {
                 // Generate Random Tile
                 const randomModelIndex = Math.floor(Math.random() * this.models.length);
                 newMesh = this.models[randomModelIndex].clone();
 
-                newMesh.structure = false;
+                newMesh.isStructure = false;
             } else {
                 // Generate Structure
                 newMesh = new THREE.Group();
                 newMesh.add(this.models[0].clone());
                 newMesh.add(this.createWFCStructure());
 
-                newMesh.structure = true;
+                newMesh.isStructure = true;
             }
         }
 
@@ -105,7 +105,7 @@ class Grid {
 
         setTimeout(function(){ newMesh.visible = true; }, 100);
 
-        if (newMesh.structure) {
+        if (newMesh.isStructure) {
             this.convertNearbyTiles(x, z);
         }
     }
@@ -204,14 +204,14 @@ class Grid {
     }
 
     structuresNearby (x, z) {
-        if (x > 0             && z > 0             && this.objects[x - 1] && this.objects[x - 1][z - 1] && this.objects[x - 1][z - 1].structure) return true;
-        if (x > 0                                  && this.objects[x - 1] && this.objects[x - 1][  z  ] && this.objects[x - 1][  z  ].structure) return true;
-        if (x > 0             && z < this.size - 1 && this.objects[x - 1] && this.objects[x - 1][z + 1] && this.objects[x - 1][z + 1].structure) return true;
-        if (                     z > 0             && this.objects[  x  ] && this.objects[  x  ][z - 1] && this.objects[  x  ][z - 1].structure) return true;
-        if (                     z < this.size - 1 && this.objects[  x  ] && this.objects[  x  ][z + 1] && this.objects[  x  ][z + 1].structure) return true;
-        if (x < this.size - 1 && z > 0             && this.objects[x + 1] && this.objects[x + 1][z - 1] && this.objects[x + 1][z - 1].structure) return true;
-        if (x < this.size - 1                      && this.objects[x + 1] && this.objects[x + 1][  z  ] && this.objects[x + 1][  z  ].structure) return true;
-        if (x < this.size - 1 && z < this.size - 1 && this.objects[x + 1] && this.objects[x + 1][z + 1] && this.objects[x + 1][z + 1].structure) return true;
+        if (x > 0             && z > 0             && this.objects[x - 1] && this.objects[x - 1][z - 1] && this.objects[x - 1][z - 1].isStructure) return true;
+        if (x > 0                                  && this.objects[x - 1] && this.objects[x - 1][  z  ] && this.objects[x - 1][  z  ].isStructure) return true;
+        if (x > 0             && z < this.size - 1 && this.objects[x - 1] && this.objects[x - 1][z + 1] && this.objects[x - 1][z + 1].isStructure) return true;
+        if (                     z > 0             && this.objects[  x  ] && this.objects[  x  ][z - 1] && this.objects[  x  ][z - 1].isStructure) return true;
+        if (                     z < this.size - 1 && this.objects[  x  ] && this.objects[  x  ][z + 1] && this.objects[  x  ][z + 1].isStructure) return true;
+        if (x < this.size - 1 && z > 0             && this.objects[x + 1] && this.objects[x + 1][z - 1] && this.objects[x + 1][z - 1].isStructure) return true;
+        if (x < this.size - 1                      && this.objects[x + 1] && this.objects[x + 1][  z  ] && this.objects[x + 1][  z  ].isStructure) return true;
+        if (x < this.size - 1 && z < this.size - 1 && this.objects[x + 1] && this.objects[x + 1][z + 1] && this.objects[x + 1][z + 1].isStructure) return true;
 
         return false;
     }
