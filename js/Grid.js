@@ -144,9 +144,13 @@ class Grid {
             this.move("forward");
         }
 
-        this.fadeSides();
+        for (let x = 0; x < this.size; x++) {
+            for (let z = 0; z < this.size; z++) {
+                this.fadeSides(x, z);
 
-        this.animateStructures();
+                this.animateStructures(x, z);
+            }
+        }
     }
 
     getCameraOffset () {
@@ -155,19 +159,15 @@ class Grid {
         return cameraOffset;
     }
 
-    fadeSides () {
+    fadeSides (x, z) {
         const maxYPosition = 4;
 
-        for (let x = 0; x < this.size; x++) {
-            for (let z = 0; z < this.size; z++) {
-            const cameraCentre = this.camera.position.clone().sub(this.baseCameraOffset);
-            const distanceToObject = this.objects[x][z].position.distanceTo(cameraCentre);
-            const opacity = this.distanceToOpacity(distanceToObject);
+        const cameraCentre = this.camera.position.clone().sub(this.baseCameraOffset);
+        const distanceToObject = this.objects[x][z].position.distanceTo(cameraCentre);
+        const opacity = this.distanceToOpacity(distanceToObject);
 
-            this.setOpacityOfGroup(this.objects[x][z], opacity);
-            this.objects[x][z].position.y = opacity * maxYPosition;
-            }
-        }
+        this.setOpacityOfGroup(this.objects[x][z], opacity);
+        this.objects[x][z].position.y = opacity * maxYPosition;
     }
 
     distanceToOpacity (distance) {
@@ -205,11 +205,17 @@ class Grid {
 
             if (finished) {
                 const mesh = model.MeshOutput();
+
+                const group = new THREE.Group();
+
+                group.add(mesh);
                 mesh.scale.divideScalar(3);
-                mesh.translateY(8);
+                mesh.translateY(2);
                 mesh.translateX(-2);
                 mesh.translateZ(2);
-                return mesh;
+
+                group.translateY(3);
+                return group;
             }
         }
 
@@ -245,14 +251,10 @@ class Grid {
         this.generateAndAddNewMesh(x, z);
     }
 
-    animateStructures() {
-        for (let x = 0; x < this.size; x++) {
-            for (let z = 0; z < this.size; z++) {
-                if (this.objects[x][z].isStructure) {
-                    this.objects[x][z].children[1].rotation.x += 0.01;
-                    this.objects[x][z].children[1].rotation.y -= 0.01;
-                }
-            }
+    animateStructures(x, z) {
+        if (this.objects[x][z].isStructure) {
+            this.objects[x][z].children[1].rotation.x += 0.01;
+            this.objects[x][z].children[1].rotation.y -= 0.01;
         }
     }
 
