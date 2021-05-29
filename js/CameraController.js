@@ -18,7 +18,7 @@ class CameraController {
         this.velocity = new THREE.Vector3();
         this.direction = new THREE.Vector3();
 
-        this.toFirstPerson();
+        this.toThirdPerson();
 
         this.controls = new PointerLockControls( camera, document.body );
 

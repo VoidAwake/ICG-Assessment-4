@@ -9,34 +9,43 @@ class Grid {
         this.camera = camera;
         this.models = models;
 
-        this.objects = new Array();
         this.group = new THREE.Group();
         this.origin = new THREE.Vector3(0, 0, 0);
+        this.baseCameraOffset = new THREE.Vector3(0, 20, 20);
+    
+        this.generateGrid();
+    }
+
+    generateGrid() {
         this.width = (this.size - 1) * this.spacing;
         this.originToCentre = new THREE.Vector3(this.width * 0.5, 0, this.width * 0.5);
-        this.baseCameraOffset = this.getCameraOffset();
-    
+
+        this.directionOffsets = {
+            "right":    new THREE.Vector3 ( this.spacing, 0, 0),
+            "left":     new THREE.Vector3 (-this.spacing, 0, 0),
+            "forward":  new THREE.Vector3 (0, 0,  this.spacing),
+            "back":     new THREE.Vector3 (0, 0, -this.spacing),
+        };
+
+        this.directionFunctions = {
+            "right":    (i, j) => new THREE.Vector3(i, 0, j),
+            "left":     (i, j) => new THREE.Vector3(this.size - i - 1, 0, j),
+            "forward":  (i, j) => new THREE.Vector3(j, 0, i),
+            "back":     (i, j) => new THREE.Vector3(j, 0, this.size - i - 1),
+        };
+
+        this.objects = new Array();
+
         for (let x = 0; x < this.size; x++) {
             this.objects[x] = new Array();
     
-            for (let z = 0; z < size; z++) {
-                this.addNewMesh(x, z);
+            for (let z = 0; z < this.size; z++) {
+                this.generateAndAddNewMesh(x, z);
             }
         }
 
-        this.directionOffsets = {
-          "right":    new THREE.Vector3 ( this.spacing, 0, 0),
-          "left":     new THREE.Vector3 (-this.spacing, 0, 0),
-          "forward":  new THREE.Vector3 (0, 0,  this.spacing),
-          "back":     new THREE.Vector3 (0, 0, -this.spacing),
-        }
 
-        this.directionFunctions = {
-          "right":    (i, j) => new THREE.Vector3(i, 0, j),
-          "left":     (i, j) => new THREE.Vector3(this.size - i - 1, 0, j),
-          "forward":  (i, j) => new THREE.Vector3(j, 0, i),
-          "back":     (i, j) => new THREE.Vector3(j, 0, this.size - i - 1),
-        }
+        this.updateCameraPosition(this.baseCameraOffset);
     }
 
     move (direction) {
@@ -59,13 +68,13 @@ class Grid {
                 this.objects[coords.x][coords.z] = this.objects[nextCoords.x][nextCoords.z];
             } else {
                 // Create new objects on the other side of the grid
-                this.addNewMesh(coords.x, coords.z);
+                this.generateAndAddNewMesh(coords.x, coords.z);
             }
           }
         }
     }
 
-    addNewMesh (x, z) {
+    generateAndAddNewMesh (x, z) {
         let newMesh;
 
         if (this.structuresNearby(x, z)) {
@@ -92,6 +101,14 @@ class Grid {
 
         this.cloneMaterialsInGroup(newMesh);
 
+        this.addNewMesh(x, z, newMesh);
+
+        if (newMesh.isStructure) {
+            this.convertNearbyTiles(x, z);
+        }
+    }
+
+    addNewMesh(x, z, newMesh) {
         let positionInGrid = new THREE.Vector3(x, 0, z).multiplyScalar(this.spacing);
         positionInGrid.add(this.origin);
 
@@ -103,10 +120,6 @@ class Grid {
         this.group.add(newMesh);
 
         setTimeout(function(){ newMesh.visible = true; }, 100);
-
-        if (newMesh.isStructure) {
-            this.convertNearbyTiles(x, z);
-        }
     }
 
     update () {
@@ -229,7 +242,7 @@ class Grid {
 
     convert (x, z) {
         this.group.remove(this.objects[x][z]);
-        this.addNewMesh(x, z);
+        this.generateAndAddNewMesh(x, z);
     }
 
     animateStructures() {
@@ -257,6 +270,19 @@ class Grid {
 
     getCentrePosition () {
         return this.origin.clone().add(this.originToCentre);
+    }
+
+    updateSizeAndSpacing(newSize, newSpacing) {
+        for (let x = 0; x < this.size; x++) {
+            for (let z = 0; z < this.size; z++) {
+                this.group.remove(this.objects[x][z]);
+            }
+        }
+
+        this.size = newSize;
+        this.spacing = newSpacing;
+
+        this.generateGrid();
     }
 }
 

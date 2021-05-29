@@ -2,9 +2,10 @@ import * as dat from "../node_modules/dat.gui/build/dat.gui.module.js";
 
 
 class GridToggles {
-    constructor (camera, cameraController) {
+    constructor (camera, cameraController, grid) {
         this.camera = camera;
         this.cameraController = cameraController;
+        this.grid = grid;
 
         var gui = new dat.GUI();
 
@@ -21,13 +22,9 @@ class GridToggles {
         };
 
         var gridSettingsObject = {
-            grid_size: 7,
+            grid_size: 14,
             grid_spacing: 2,
-            ResetGrid: function () {
-                const grid = new Grid(this.grid_size, this.grid_spacing, camera, models);
-                scene.add(grid.group);
-
-            },
+            ResetGrid: () => this.grid.updateSizeAndSpacing(gridSettingsObject.grid_size, gridSettingsObject.grid_spacing),
         };
 
         // dat.GUI will modify colors in the format defined by their initial value.
@@ -51,7 +48,7 @@ class GridToggles {
 
         var gridSettingsFolder = gui.addFolder('Grid Settings');
         gridSettingsFolder.add(gridSettingsObject, 'grid_size', 1,30,1);
-        gridSettingsFolder.add(gridSettingsObject, 'grid_spacing', 7);
+        gridSettingsFolder.add(gridSettingsObject, 'grid_spacing', 1,30,1);
         gridSettingsFolder.add(gridSettingsObject, 'ResetGrid');
     }
 }

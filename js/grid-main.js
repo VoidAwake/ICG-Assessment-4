@@ -131,7 +131,7 @@ async function setup () {
     new THREE.Vector3(0, 20, 20)
   );
 
-  const gridToggles = new GridToggles(camera, cameraController);
+  const gridToggles = new GridToggles(camera, cameraController, grid);
 
   function animate () {
       requestAnimationFrame(animate);
