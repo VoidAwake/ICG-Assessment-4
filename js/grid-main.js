@@ -2,7 +2,6 @@ import * as THREE from '../node_modules/three/build/three.module.js';
 import { Grid } from "./Grid.js";
 import { CameraController } from "./CameraController.js";
 import { GLTFLoader } from '../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
-import {PointerLockControls} from "../node_modules/three/examples/jsm/controls/PointerLockControls.js";
 import { GridToggles } from "./GridToggles.js";
 
 var currentBiome = 0;
@@ -25,17 +24,8 @@ async function setup () {
       1000
   );
 
-  const gridToggles = new GridToggles(camera);
 
-  var controls = new PointerLockControls(camera, renderer.domElement);
-  //	scene.add(playerMesh);
-  document.addEventListener(
-    'click',
-    function () {
-      controls.lock();
-    },
-    false
-  );
+
   const loader = new GLTFLoader();
 
   function loadModel (url) {
@@ -125,22 +115,23 @@ async function setup () {
   var light = new THREE.HemisphereLight(0xffffff, 0x000000, 4);
   scene.add(light); 
 
-  // 3rd person
-  // camera.position.set(13, 25, 30);
-  // camera.lookAt(13, 0, 15);
-
-  // first person
-  camera.position.set(13,6,14);
-  camera.lookAt(13,0,-10)
-
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   document.body.appendChild(renderer.domElement);
 
-  const cameraController = new CameraController(camera, 100);
-
   const grid = new Grid(14, 2, camera, biomes[currentBiome]);
   scene.add(grid.group);
+
+  const cameraController = new CameraController(
+    scene,
+    camera,
+    grid,
+    100,
+    new THREE.Vector3(0, 10, 0),
+    new THREE.Vector3(0, 25, 30)
+  );
+
+  const gridToggles = new GridToggles(camera, cameraController);
 
   function animate () {
       requestAnimationFrame(animate);

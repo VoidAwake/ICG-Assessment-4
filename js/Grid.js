@@ -12,9 +12,9 @@ class Grid {
         this.objects = new Array();
         this.group = new THREE.Group();
         this.origin = new THREE.Vector3(0, 0, 0);
-        this.originalCameraOffset = this.getCameraOffset();
-        this.baseCameraOffset = this.getCameraOffset();
         this.width = (this.size - 1) * this.spacing;
+        this.originToCentre = new THREE.Vector3(this.width * 0.5, 0, this.width * 0.5);
+        this.baseCameraOffset = this.getCameraOffset();
     
         for (let x = 0; x < this.size; x++) {
             this.objects[x] = new Array();
@@ -43,7 +43,6 @@ class Grid {
         console.log("Move grid " + direction);
 
         this.origin.add(this.directionOffsets[direction]);
-        this.baseCameraOffset.add(this.directionOffsets[direction]);
 
         for (let i = 0; i < this.size; i++) {
           for (let j = 0; j < this.size; j++) {
@@ -133,11 +132,13 @@ class Grid {
         }
 
         this.fadeSides();
+
+        this.animateStructures();
     }
 
     getCameraOffset () {
         let cameraOffset = this.camera.position.clone();
-        cameraOffset.sub(this.group.position);
+        cameraOffset.sub(this.getCentrePosition());
         return cameraOffset;
     }
 
@@ -146,9 +147,8 @@ class Grid {
 
         for (let x = 0; x < this.size; x++) {
             for (let z = 0; z < this.size; z++) {
-            const originToCentre = new THREE.Vector3(this.width * 0.5, 0, this.width * 0.5);
-            const gridCentre = this.camera.position.clone().sub(this.originalCameraOffset).add(originToCentre);
-            const distanceToObject = this.objects[x][z].position.distanceTo(gridCentre);
+            const cameraCentre = this.camera.position.clone().sub(this.baseCameraOffset);
+            const distanceToObject = this.objects[x][z].position.distanceTo(cameraCentre);
             const opacity = this.distanceToOpacity(distanceToObject);
 
             this.setOpacityOfGroup(this.objects[x][z], opacity);
@@ -230,6 +230,33 @@ class Grid {
     convert (x, z) {
         this.group.remove(this.objects[x][z]);
         this.addNewMesh(x, z);
+    }
+
+    animateStructures() {
+        for (let x = 0; x < this.size; x++) {
+            for (let z = 0; z < this.size; z++) {
+                if (this.objects[x][z].isStructure) {
+                    this.objects[x][z].children[1].rotation.x += 0.01;
+                    this.objects[x][z].children[1].rotation.y -= 0.01;
+                }
+            }
+        }
+    }
+
+    updateCameraPosition (newBaseCameraOffset) {
+        const centrePosition = this.getCentrePosition();
+        const newCameraPosition = centrePosition.clone().add(newBaseCameraOffset);
+        this.camera.position.set(
+            newCameraPosition.x,
+            newCameraPosition.y,
+            newCameraPosition.z
+        );
+        this.camera.lookAt(centrePosition.x, centrePosition.y, centrePosition.z);
+        this.baseCameraOffset.set(newBaseCameraOffset.x, newBaseCameraOffset.y, newBaseCameraOffset.z);
+    }
+
+    getCentrePosition () {
+        return this.origin.clone().add(this.originToCentre);
     }
 }
 
