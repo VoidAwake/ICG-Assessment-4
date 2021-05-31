@@ -26,6 +26,36 @@ async function setup () {
       1000
   );
 
+  
+
+  const sphereRadius = 50;
+  const sphereWidthDivisions = 32;
+  const sphereHeightDivisions = 16;
+  const sphereGeo = new THREE.SphereGeometry(
+    sphereRadius,
+    sphereWidthDivisions,
+    sphereHeightDivisions
+  );
+
+  const sphereMat = new THREE.MeshPhongMaterial({color : '#CA8'});
+  const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+  mesh.position.set(-sphereRadius - 1, 100, 50);
+  scene.add(mesh);
+
+  class ColorGUIHelper {
+    constructor(object, prop) {
+      this.object = object;
+      this.prop = prop;
+    }
+    get value() {
+      return `#${this.object[this.prop].getHexString()}`;
+    }
+    set value(hexString) {
+      this.object[this.prop].set(hexString);
+    }
+  }
+
+
   var gui = new dat.GUI({ load: getPresetJSON(), preset: 'Preset1' });
     var object1 = {
       type1_boolean: false,
@@ -52,6 +82,7 @@ async function setup () {
         // camera.updateProjectionMatrix();
 
       },
+
     };
 
       // 3rd person
@@ -98,7 +129,34 @@ async function setup () {
     folder2.add(object2, 'grid_spacing', 7);
     folder2.add(object2, 'ResetGrid');
 
+    {
+      const color = 0xffffff;
+      const intensity = 4;
+      const light = new THREE.PointLight(color, intensity);
+      light.position.set(100, 100, -10);
+      scene.add(light);
+  
+      const helper = new THREE.PointLightHelper(light);
+      scene.add(helper);
+  
+      function updateLight() {
+        helper.update();
+      }
 
+      function updatePosition() {
+        helper.update();
+      }
+  
+      var folder3 = gui.addFolder('Lighting');
+      folder3.addColor(new ColorGUIHelper(light, 'color'), 'value').name('color');
+      folder3.add(light, 'intensity', 0, 10, 0.01);
+      folder3.add(light, 'distance', 0, 40).onChange(updateLight);
+      folder3.add(light.position, 'x', -10, 100,1).onChange(updatePosition);
+      folder3.add(light.position, 'y', 0, 100,1).onChange(updatePosition);
+      folder3.add(light.position, 'z', -10, 100,1).onChange(updatePosition);
+  
+      // makeXYZGUI(gui, light.position, 'position');
+    }
 
 
     // presetJSON: created from pressing the gear.
@@ -266,6 +324,8 @@ async function setup () {
   const grid = new Grid(14, 2, camera, biomes[currentBiome]);
   scene.add(grid.group);
 
+  
+
   function animate () {
       requestAnimationFrame(animate);
 
@@ -276,6 +336,8 @@ async function setup () {
       grid.update();
 
       renderer.render(scene, camera);
+
+      
   }
 
   animate();
