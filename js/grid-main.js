@@ -44,7 +44,8 @@ async function setup () {
         camera.lookAt(13,0,-10)
       },
       Set_Third_Person: function () {
-
+        camera.fov = this.fov;
+        camera.updateProjectionMatrix();
         camera.position.set(13, 16, 15);
         camera.lookAt(13,-220,15);
         console.log(camera.position)
