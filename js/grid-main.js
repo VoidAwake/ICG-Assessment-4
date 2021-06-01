@@ -13,6 +13,7 @@ async function setup () {
   const scene = new THREE.Scene();
   
   const renderer = new THREE.WebGLRenderer();
+  renderer.shadowMap.enabled = true;
 
   const ratio = window.innerWidth / window.innerHeight;
 
@@ -23,7 +24,34 @@ async function setup () {
       1000
   );
 
+  const sphereRadius = 50;
+  const sphereWidthDivisions = 32;
+  const sphereHeightDivisions = 16;
+  const sphereGeo = new THREE.SphereGeometry(
+    sphereRadius,
+    sphereWidthDivisions,
+    sphereHeightDivisions
+  );
 
+  const sphereMat = new THREE.MeshPhongMaterial({color : '#CA8'});
+  const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+  mesh.position.set(-sphereRadius - 1, 100, 50);
+  scene.add(mesh);
+
+  const color = 0xffffff;
+  const intensity = 4;
+  const light = new THREE.PointLight(color, intensity);
+  light.castShadow = true;
+  light.position.set(100, 100, -10);
+  scene.add(light);
+
+  light.shadow.mapSize.width = 2048;
+  light.shadow.mapSize.height = 2048;
+  light.shadow.camera.near = 0.5;
+  light.shadow.camera.far = 500;
+
+  const helper = new THREE.PointLightHelper(light);
+  scene.add(helper);
 
   const loader = new GLTFLoader();
 
@@ -60,6 +88,7 @@ async function setup () {
     for (const child of model.scene.children) {
       if (child.type == "Mesh") {
         child.material.transparent = true;
+        child.receiveShadow = true;
 
         newGroup.add(child.clone());
       }
@@ -111,8 +140,8 @@ async function setup () {
     ],
   ];
 
-  var light = new THREE.HemisphereLight(0xffffff, 0x000000, 4);
-  scene.add(light); 
+  // var light = new THREE.HemisphereLight(0xffffff, 0x000000, 4);
+  // scene.add(light); 
 
   renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -130,7 +159,7 @@ async function setup () {
     new THREE.Vector3(0, 20, 20)
   );
 
-  const gridToggles = new GridToggles(camera, cameraController, grid);
+  const gridToggles = new GridToggles(camera, cameraController, grid, light, grid);
 
   function animate () {
       requestAnimationFrame(animate);

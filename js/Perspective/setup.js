@@ -44,6 +44,8 @@ function init() {
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
+
+  
   
   controls = new PointerLockControls(camera, renderer.domElement);
   
@@ -118,6 +120,8 @@ function init() {
   document.addEventListener('keydown', onKeyDown, false);
   document.addEventListener('keyup', onKeyUp, false);
   window.addEventListener('resize', onWindowResize, false);
+
+  
 
   {
     const planeSize = 40;
@@ -272,6 +276,8 @@ function animate() {
 		  // console.log(objects.children[i].position.y);
 	  }
   } 
+
+
 
 
   if (controlsEnabled == true) {

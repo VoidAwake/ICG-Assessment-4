@@ -2,10 +2,12 @@ import * as dat from "../node_modules/dat.gui/build/dat.gui.module.js";
 
 
 class GridToggles {
-    constructor (camera, cameraController, grid) {
+    constructor (camera, cameraController, grid, light, helper) {
         this.camera = camera;
         this.cameraController = cameraController;
         this.grid = grid;
+        this.light = light;
+        this.helper = helper;
 
         var gui = new dat.GUI();
 
@@ -50,6 +52,37 @@ class GridToggles {
         gridSettingsFolder.add(gridSettingsObject, 'grid_size', 1,30,1);
         gridSettingsFolder.add(gridSettingsObject, 'grid_spacing', 1,30,1);
         gridSettingsFolder.add(gridSettingsObject, 'ResetGrid');
+
+        function updateLight() {
+            this.helper.update();
+        }
+    
+        function updatePosition() {
+            this.helper.update();
+        }
+    
+        class ColorGUIHelper {
+            constructor(object, prop) {
+                this.object = object;
+                this.prop = prop;
+            }
+            get value() {
+                return `#${this.object[this.prop].getHexString()}`;
+            }
+            set value(hexString) {
+                this.object[this.prop].set(hexString);
+            }
+        }
+    
+        var lightingSettingsFolder = gui.addFolder('Lighting');
+        lightingSettingsFolder.addColor(new ColorGUIHelper(this.light, 'color'), 'value').name('color');
+        lightingSettingsFolder.add(this.light, 'intensity', 0, 10, 0.01);
+        lightingSettingsFolder.add(this.light, 'distance', 0, 40).onChange(updateLight.bind(this));
+        lightingSettingsFolder.add(this.light.position, 'x', -10, 100,1).onChange(updatePosition.bind(this));
+        lightingSettingsFolder.add(this.light.position, 'y', 0, 100,1).onChange(updatePosition.bind(this));
+        lightingSettingsFolder.add(this.light.position, 'z', -10, 100,1).onChange(updatePosition.bind(this));
+    
+        // makeXYZGUI(gui, light.position, 'position');
     }
 }
 
