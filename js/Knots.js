@@ -7,6 +7,7 @@ const part = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), new THREE.MeshPhongMat
 	reflectivity: 1,
 	shininess: 0.98,
 }));
+part.castShadow = true;
 
 // Line
 const line = part.clone();

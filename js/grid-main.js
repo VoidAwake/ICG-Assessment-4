@@ -13,6 +13,7 @@ async function setup () {
   const scene = new THREE.Scene();
   
   const renderer = new THREE.WebGLRenderer();
+  renderer.shadowMap.enabled = true;
 
   const ratio = window.innerWidth / window.innerHeight;
 
@@ -40,8 +41,14 @@ async function setup () {
   const color = 0xffffff;
   const intensity = 4;
   const light = new THREE.PointLight(color, intensity);
+  light.castShadow = true;
   light.position.set(100, 100, -10);
   scene.add(light);
+
+  light.shadow.mapSize.width = 2048;
+  light.shadow.mapSize.height = 2048;
+  light.shadow.camera.near = 0.5;
+  light.shadow.camera.far = 500;
 
   const helper = new THREE.PointLightHelper(light);
   scene.add(helper);
@@ -81,6 +88,7 @@ async function setup () {
     for (const child of model.scene.children) {
       if (child.type == "Mesh") {
         child.material.transparent = true;
+        child.receiveShadow = true;
 
         newGroup.add(child.clone());
       }
