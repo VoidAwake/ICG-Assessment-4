@@ -5,7 +5,6 @@ import { GLTFLoader } from '../node_modules/three/examples/jsm/loaders/GLTFLoade
 import { GridToggles } from "./GridToggles.js";
 
 var currentBiome = 0;
-const renderer = new THREE.WebGLRenderer();
 var clock = new THREE.Clock();
 clock.start();
 setup();
