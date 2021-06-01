@@ -30,7 +30,7 @@ class CameraController {
             true
         );
 
-        this.controls.addEventListener("lock", () => this.blocker.style.display);
+        this.controls.addEventListener("lock", () => this.blocker.style.display = "none");
 
         this.controls.addEventListener("unlock", () => this.blocker.style.display = "block");
 
