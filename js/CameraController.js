@@ -1,9 +1,13 @@
 import * as THREE from '../node_modules/three/build/three.module.js';
-import { PointerLockControls } from "./Dependencies/PointerLockControls.js";
+import { PointerLockControls } from "../node_modules/three/examples/jsm/controls/PointerLockControls.js";
 
 class CameraController {
-    constructor (camera, speed) {
+    constructor (scene, camera, grid, speed, firstPersonOffset, thirdPersonOffset) {
+        this.scene = scene;
+        this.grid = grid;
         this.speed = speed;
+        this.firstPersonOffset = firstPersonOffset;
+        this.thirdPersonOffset = thirdPersonOffset;
 
         this.moveForward = false;
         this.moveBackward = false;
@@ -14,8 +18,24 @@ class CameraController {
         this.velocity = new THREE.Vector3();
         this.direction = new THREE.Vector3();
 
+        this.toThirdPerson();
+
         this.controls = new PointerLockControls( camera, document.body );
-        
+
+        this.blocker = document.getElementById("blocker");
+
+        this.blocker.addEventListener(
+            "click",
+            () => this.controls.lock(),
+            true
+        );
+
+        this.controls.addEventListener("lock", () => this.blocker.style.display);
+
+        this.controls.addEventListener("unlock", () => this.blocker.style.display = "block");
+
+        this.scene.add(this.controls.getObject());
+
         var onKeyDown = function ( event ) {
         
             switch ( event.keyCode ) {
@@ -93,6 +113,14 @@ class CameraController {
         this.controls.moveRight(this.velocity.x * delta);
     
         this.prevTime = time;
+    }
+
+    toFirstPerson () {
+        this.grid.updateCameraPosition(this.firstPersonOffset);
+    }
+
+    toThirdPerson () {
+        this.grid.updateCameraPosition(this.thirdPersonOffset); 
     }
 }
 
